@@ -90,6 +90,7 @@ describe("POST /api/chat - Image Fetching", () => {
       headers: {
         "Content-Type": "application/json",
         host: "localhost:3000",
+        "x-forwarded-proto": "http",
       },
       body: JSON.stringify({
         messages: [{ role: "user", content: "Analyze this space" }],
@@ -118,6 +119,7 @@ describe("POST /api/chat - Image Fetching", () => {
       headers: {
         "Content-Type": "application/json",
         host: "localhost:3000",
+        "x-forwarded-proto": "http",
       },
       body: JSON.stringify({
         messages: [{ role: "user", content: "Analyze this space" }],
@@ -142,16 +144,15 @@ describe("POST /api/chat - Image Fetching", () => {
     }
   });
 
-  it("uses VERCEL_URL env var for CDN URL when present", async () => {
-    // Set VERCEL_URL environment variable
-    process.env.VERCEL_URL = "my-app.vercel.app";
-
+  it("uses x-forwarded-host header for CDN URL when present", async () => {
     const { POST } = await import("../route");
 
     const request = new NextRequest("http://localhost:3000/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-forwarded-host": "myapp.vercel.app",
+        "x-forwarded-proto": "https",
       },
       body: JSON.stringify({
         messages: [{ role: "user", content: "Analyze this space" }],
@@ -162,17 +163,14 @@ describe("POST /api/chat - Image Fetching", () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
 
-    // Verify CDN URL uses VERCEL_URL
+    // Verify CDN URL uses forwarded host
     const thumbnailFetch = fetchCalls.find((call) =>
       call.url.includes("thumbnail.jpg")
     );
     expect(thumbnailFetch).toBeDefined();
     expect(thumbnailFetch!.url).toBe(
-      "https://my-app.vercel.app/data/spaces/space-001/thumbnail.jpg"
+      "https://myapp.vercel.app/data/spaces/space-001/thumbnail.jpg"
     );
-
-    // Clean up
-    delete process.env.VERCEL_URL;
   });
 
   it("includes fetched images in response content blocks", async () => {

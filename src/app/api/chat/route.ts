@@ -224,12 +224,16 @@ export async function POST(req: NextRequest) {
     let totalSampledImages = 0;
 
     // Get base URL for fetching files from CDN
-    // On Vercel, use the deployment URL; locally use the host header
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : req.headers.get("host")
-        ? `${req.headers.get("x-forwarded-proto") || "http"}://${req.headers.get("host")}`
+    // Use the request's host header (actual domain user is accessing), fallback to VERCEL_URL
+    const forwardedHost = req.headers.get("x-forwarded-host") || req.headers.get("host");
+    const protocol = req.headers.get("x-forwarded-proto") || "https";
+    const baseUrl = forwardedHost
+      ? `${protocol}://${forwardedHost}`
+      : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
         : "http://localhost:3000";
+    
+    console.log("[Chat API] Base URL for fetching:", baseUrl);
 
     // Load reference resources for the analysis type (only on initial analysis)
     if (!isFollowUp && validAnalysisType) {
@@ -275,8 +279,11 @@ export async function POST(req: NextRequest) {
       if (!isFollowUp && spaceManifest) {
         // Add thumbnail first as overview (fetch via HTTP)
         if (spaceManifest.thumbnailPath) {
+          const thumbUrl = `${baseUrl}${spaceManifest.thumbnailPath}`;
+          console.log(`[Chat API] Fetching thumbnail: ${thumbUrl}`);
           try {
-            const thumbResponse = await fetch(`${baseUrl}${spaceManifest.thumbnailPath}`);
+            const thumbResponse = await fetch(thumbUrl);
+            console.log(`[Chat API] Thumbnail response: ${thumbResponse.status} ${thumbResponse.statusText}`);
             if (thumbResponse.ok) {
               const thumbBuffer = await thumbResponse.arrayBuffer();
               const thumbData = Buffer.from(thumbBuffer).toString("base64");
@@ -293,9 +300,11 @@ export async function POST(req: NextRequest) {
                 }
               });
               totalSampledImages++;
+            } else {
+              console.warn(`[Chat API] Thumbnail fetch failed: ${thumbResponse.status}`);
             }
           } catch (e) {
-            console.warn(`Failed to fetch thumbnail for ${spacePath}:`, e);
+            console.error(`[Chat API] Failed to fetch thumbnail for ${spacePath}:`, e);
           }
         }
 
@@ -309,6 +318,8 @@ export async function POST(req: NextRequest) {
             text: `\n[Sampled ${sampleIndices.length} of ${allImages.length} capture images]`
           });
 
+          console.log(`[Chat API] Fetching ${sampleIndices.length} images for ${spacePath}`);
+          
           // Fetch images in parallel for speed
           const imagePromises = sampleIndices.map(async (idx) => {
             const imgUrl = `${baseUrl}/data/spaces/${spacePath}/images/${allImages[idx]}`;
@@ -317,14 +328,18 @@ export async function POST(req: NextRequest) {
               if (response.ok) {
                 const buffer = await response.arrayBuffer();
                 return Buffer.from(buffer).toString("base64");
+              } else {
+                console.warn(`[Chat API] Image fetch failed (${response.status}): ${imgUrl}`);
               }
             } catch (e) {
-              console.warn(`Failed to fetch image ${allImages[idx]}:`, e);
+              console.error(`[Chat API] Failed to fetch image ${allImages[idx]}:`, e);
             }
             return null;
           });
 
           const imageDataArray = await Promise.all(imagePromises);
+          const successCount = imageDataArray.filter(Boolean).length;
+          console.log(`[Chat API] Successfully fetched ${successCount}/${sampleIndices.length} images`);
           
           for (const imgData of imageDataArray) {
             if (imgData) {
