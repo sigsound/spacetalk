@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import fs from "fs";
 import path from "path";
 import { sampleImages } from "@/lib/sampling";
+import manifest from "@/../public/data/spaces-manifest.json";
 
 import { AnalysisType } from "@/lib/types";
 
@@ -238,17 +239,26 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Get base URL for fetching images from CDN
+    const baseUrl = req.headers.get("x-forwarded-host") 
+      ? `https://${req.headers.get("x-forwarded-host")}`
+      : req.headers.get("host")
+        ? `${req.headers.get("x-forwarded-proto") || "http"}://${req.headers.get("host")}`
+        : "http://localhost:3000";
+
     for (const spacePath of selectedSpaces) {
       const spaceDir = path.join(process.cwd(), "public/data/spaces", spacePath);
-      const imagesDir = path.join(spaceDir, "images");
       const locationDir = path.join(spaceDir, "location");
+      
+      // Get space info from manifest
+      const spaceManifest = manifest.spaces.find(s => s.id === spacePath);
 
       contentBlocks.push({
         type: "text",
         text: `\n=== SPACE: ${spacePath} ===`
       });
 
-      // Read floorplan.csv first - contains the most relevant structured data
+      // Read floorplan.csv - small text file, OK to use fs
       const floorplanPath = path.join(spaceDir, "floorplan.csv");
       if (fs.existsSync(floorplanPath)) {
         const csvContent = fs.readFileSync(floorplanPath, "utf-8");
@@ -258,7 +268,7 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Load location data (just first file - they're all the same location)
+      // Load location data - small JSON file, OK to use fs
       if (fs.existsSync(locationDir)) {
         const locationFiles = fs.readdirSync(locationDir).filter(f => f.endsWith(".json"));
         if (locationFiles.length > 0) {
@@ -273,32 +283,36 @@ export async function POST(req: NextRequest) {
       }
 
       // Only load images for the initial question, not follow-ups
-      if (!isFollowUp) {
-        // Add thumbnail first as overview
-        const thumbnailPath = path.join(spaceDir, "thumbnail.jpg");
-        if (fs.existsSync(thumbnailPath)) {
-          const thumbData = fs.readFileSync(thumbnailPath).toString("base64");
-          contentBlocks.push({
-            type: "text",
-            text: `\n[Thumbnail overview of 3D model]`
-          });
-          contentBlocks.push({
-            type: "image",
-            source: {
-              type: "base64",
-              media_type: "image/jpeg",
-              data: thumbData
+      if (!isFollowUp && spaceManifest) {
+        // Add thumbnail first as overview (fetch via HTTP)
+        if (spaceManifest.thumbnailPath) {
+          try {
+            const thumbResponse = await fetch(`${baseUrl}${spaceManifest.thumbnailPath}`);
+            if (thumbResponse.ok) {
+              const thumbBuffer = await thumbResponse.arrayBuffer();
+              const thumbData = Buffer.from(thumbBuffer).toString("base64");
+              contentBlocks.push({
+                type: "text",
+                text: `\n[Thumbnail overview of 3D model]`
+              });
+              contentBlocks.push({
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: "image/jpeg",
+                  data: thumbData
+                }
+              });
+              totalSampledImages++;
             }
-          });
-          totalSampledImages++;
+          } catch (e) {
+            console.warn(`Failed to fetch thumbnail for ${spacePath}:`, e);
+          }
         }
 
-        // Sample a few representative images
-        if (fs.existsSync(imagesDir)) {
-          const allImages = fs.readdirSync(imagesDir)
-            .filter(f => f.endsWith(".jpg") || f.endsWith(".jpeg"))
-            .sort();
-
+        // Sample and fetch representative images via HTTP
+        const allImages = spaceManifest.images;
+        if (allImages.length > 0) {
           const sampleIndices = sampleImages(allImages.length);
 
           contentBlocks.push({
@@ -306,23 +320,38 @@ export async function POST(req: NextRequest) {
             text: `\n[Sampled ${sampleIndices.length} of ${allImages.length} capture images]`
           });
 
-          for (const idx of sampleIndices) {
-            const imgPath = path.join(imagesDir, allImages[idx]);
-            const imgData = fs.readFileSync(imgPath).toString("base64");
-
-            contentBlocks.push({
-              type: "image",
-              source: {
-                type: "base64",
-                media_type: "image/jpeg",
-                data: imgData
+          // Fetch images in parallel for speed
+          const imagePromises = sampleIndices.map(async (idx) => {
+            const imgUrl = `${baseUrl}/data/spaces/${spacePath}/images/${allImages[idx]}`;
+            try {
+              const response = await fetch(imgUrl);
+              if (response.ok) {
+                const buffer = await response.arrayBuffer();
+                return Buffer.from(buffer).toString("base64");
               }
-            });
-          }
+            } catch (e) {
+              console.warn(`Failed to fetch image ${allImages[idx]}:`, e);
+            }
+            return null;
+          });
 
-          totalSampledImages += sampleIndices.length;
+          const imageDataArray = await Promise.all(imagePromises);
+          
+          for (const imgData of imageDataArray) {
+            if (imgData) {
+              contentBlocks.push({
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: "image/jpeg",
+                  data: imgData
+                }
+              });
+              totalSampledImages++;
+            }
+          }
         }
-      } else {
+      } else if (isFollowUp) {
         // For follow-ups, note context from initial analysis
         contentBlocks.push({
           type: "text",
