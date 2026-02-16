@@ -224,8 +224,9 @@ export async function POST(req: NextRequest) {
     let totalSampledImages = 0;
 
     // Get base URL for fetching files from CDN
-    const baseUrl = req.headers.get("x-forwarded-host") 
-      ? `https://${req.headers.get("x-forwarded-host")}`
+    // On Vercel, use the deployment URL; locally use the host header
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
       : req.headers.get("host")
         ? `${req.headers.get("x-forwarded-proto") || "http"}://${req.headers.get("host")}`
         : "http://localhost:3000";
@@ -254,28 +255,20 @@ export async function POST(req: NextRequest) {
         text: `\n=== SPACE: ${spacePath} ===`
       });
 
-      // Fetch floorplan.csv via HTTP if it exists
-      if (spaceManifest?.hasFloorplan) {
-        const csvContent = await fetchTextFile(`${baseUrl}/data/spaces/${spacePath}/floorplan.csv`);
-        if (csvContent) {
-          contentBlocks.push({
-            type: "text",
-            text: `\n--- Floor Plan Data (floorplan.csv) ---\n${csvContent}`
-          });
-        }
+      // Add floorplan data from manifest if available
+      if (spaceManifest?.floorplanData) {
+        contentBlocks.push({
+          type: "text",
+          text: `\n--- Floor Plan Data (floorplan.csv) ---\n${spaceManifest.floorplanData}`
+        });
       }
 
-      // Fetch location data via HTTP if it exists
-      if (spaceManifest?.hasLocationData && spaceManifest?.locationFile) {
-        const locationData = await fetchJsonFile(
-          `${baseUrl}/data/spaces/${spacePath}/location/${spaceManifest.locationFile}`
-        );
-        if (locationData) {
-          contentBlocks.push({
-            type: "text",
-            text: `\n--- Location Data ---\n${JSON.stringify(locationData, null, 2)}`
-          });
-        }
+      // Add location data from manifest if available
+      if (spaceManifest?.locationData) {
+        contentBlocks.push({
+          type: "text",
+          text: `\n--- Location Data ---\n${JSON.stringify(spaceManifest.locationData, null, 2)}`
+        });
       }
 
       // Only load images for the initial question, not follow-ups

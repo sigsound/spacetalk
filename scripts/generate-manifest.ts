@@ -13,9 +13,8 @@ interface SpaceManifestEntry {
   name: string;
   thumbnailPath: string | null;
   images: string[];
-  hasFloorplan: boolean;
-  hasLocationData: boolean;
-  locationFile: string | null;
+  floorplanData: string | null;
+  locationData: object | null;
 }
 
 interface Manifest {
@@ -61,12 +60,26 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
       }
     }
 
-    // Find first JSON file in location directory
-    let locationFile: string | null = null;
+    // Read floorplan data if exists
+    let floorplanData: string | null = null;
+    if (fs.existsSync(floorplanPath)) {
+      try {
+        floorplanData = fs.readFileSync(floorplanPath, "utf-8");
+      } catch {
+        // Ignore read errors
+      }
+    }
+
+    // Read location data if exists
+    let locationData: object | null = null;
     if (fs.existsSync(locationDir)) {
       const locationFiles = fs.readdirSync(locationDir).filter(f => f.endsWith(".json"));
       if (locationFiles.length > 0) {
-        locationFile = locationFiles[0];
+        try {
+          locationData = JSON.parse(fs.readFileSync(path.join(locationDir, locationFiles[0]), "utf-8"));
+        } catch {
+          // Ignore parse errors
+        }
       }
     }
 
@@ -79,9 +92,8 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
           ? `/data/spaces/${entry.name}/images/${images[0]}`
           : null,
       images,
-      hasFloorplan: fs.existsSync(floorplanPath),
-      hasLocationData: fs.existsSync(locationDir),
-      locationFile,
+      floorplanData,
+      locationData,
     };
   });
 

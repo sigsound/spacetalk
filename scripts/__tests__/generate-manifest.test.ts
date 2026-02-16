@@ -75,9 +75,8 @@ describe("generateManifest", () => {
       "frame_00002.jpg",
       "frame_00003.jpeg",
     ]);
-    expect(space1!.hasFloorplan).toBe(true);
-    expect(space1!.hasLocationData).toBe(true);
-    expect(space1!.locationFile).toBe("address.json");
+    expect(space1!.floorplanData).toBe("room,x,y\nliving,0,0");
+    expect(space1!.locationData).toEqual({ city: "San Francisco" });
 
     // Verify space-002
     const space2 = manifest.spaces.find((s) => s.id === "space-002");
@@ -88,9 +87,8 @@ describe("generateManifest", () => {
       "/data/spaces/space-002/images/img_001.jpg"
     );
     expect(space2!.images).toEqual(["img_001.jpg"]);
-    expect(space2!.hasFloorplan).toBe(false);
-    expect(space2!.hasLocationData).toBe(false);
-    expect(space2!.locationFile).toBeNull();
+    expect(space2!.floorplanData).toBeNull();
+    expect(space2!.locationData).toBeNull();
   });
 
   it("handles spaces with missing metadata files gracefully", () => {

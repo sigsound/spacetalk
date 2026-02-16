@@ -40,18 +40,16 @@ vi.mock("@/../public/data/spaces-manifest.json", () => ({
         name: "Test Space",
         thumbnailPath: "/data/spaces/space-001/thumbnail.jpg",
         images: ["frame_00001.jpg", "frame_00002.jpg", "frame_00003.jpg"],
-        hasFloorplan: false,
-        hasLocationData: false,
-        locationFile: null,
+        floorplanData: null,
+        locationData: null,
       },
       {
         id: "space-002",
         name: "Another Space",
         thumbnailPath: null,
         images: ["img_001.jpg"],
-        hasFloorplan: true,
-        hasLocationData: true,
-        locationFile: "location.json",
+        floorplanData: "room,x,y\nliving,0,0",
+        locationData: { city: "Test City" },
       },
     ],
   },
@@ -144,15 +142,16 @@ describe("POST /api/chat - Image Fetching", () => {
     }
   });
 
-  it("uses x-forwarded-host header for CDN URL when present", async () => {
+  it("uses VERCEL_URL env var for CDN URL when present", async () => {
+    // Set VERCEL_URL environment variable
+    process.env.VERCEL_URL = "my-app.vercel.app";
+
     const { POST } = await import("../route");
 
     const request = new NextRequest("http://localhost:3000/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-forwarded-host": "cdn.example.com",
-        "x-forwarded-proto": "https",
       },
       body: JSON.stringify({
         messages: [{ role: "user", content: "Analyze this space" }],
@@ -163,14 +162,17 @@ describe("POST /api/chat - Image Fetching", () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
 
-    // Verify CDN URL uses forwarded host
+    // Verify CDN URL uses VERCEL_URL
     const thumbnailFetch = fetchCalls.find((call) =>
       call.url.includes("thumbnail.jpg")
     );
     expect(thumbnailFetch).toBeDefined();
     expect(thumbnailFetch!.url).toBe(
-      "https://cdn.example.com/data/spaces/space-001/thumbnail.jpg"
+      "https://my-app.vercel.app/data/spaces/space-001/thumbnail.jpg"
     );
+
+    // Clean up
+    delete process.env.VERCEL_URL;
   });
 
   it("includes fetched images in response content blocks", async () => {
