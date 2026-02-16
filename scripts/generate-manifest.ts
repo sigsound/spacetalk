@@ -15,6 +15,7 @@ interface SpaceManifestEntry {
   images: string[];
   hasFloorplan: boolean;
   hasLocationData: boolean;
+  locationFile: string | null;
 }
 
 interface Manifest {
@@ -25,17 +26,17 @@ interface Manifest {
 const spacesDir = path.join(process.cwd(), "public/data/spaces");
 const outputPath = path.join(process.cwd(), "public/data/spaces-manifest.json");
 
-function generateManifest(): Manifest {
-  if (!fs.existsSync(spacesDir)) {
-    console.error("Spaces directory not found:", spacesDir);
+export function generateManifest(spacesDirectory: string = spacesDir): Manifest {
+  if (!fs.existsSync(spacesDirectory)) {
+    console.error("Spaces directory not found:", spacesDirectory);
     return { generatedAt: new Date().toISOString(), spaces: [] };
   }
 
-  const entries = fs.readdirSync(spacesDir, { withFileTypes: true })
+  const entries = fs.readdirSync(spacesDirectory, { withFileTypes: true })
     .filter(e => e.isDirectory());
 
   const spaces: SpaceManifestEntry[] = entries.map(entry => {
-    const spaceDir = path.join(spacesDir, entry.name);
+    const spaceDir = path.join(spacesDirectory, entry.name);
     const imagesDir = path.join(spaceDir, "images");
     const metadataPath = path.join(spaceDir, "metadata.json");
     const floorplanPath = path.join(spaceDir, "floorplan.csv");
@@ -60,6 +61,15 @@ function generateManifest(): Manifest {
       }
     }
 
+    // Find first JSON file in location directory
+    let locationFile: string | null = null;
+    if (fs.existsSync(locationDir)) {
+      const locationFiles = fs.readdirSync(locationDir).filter(f => f.endsWith(".json"));
+      if (locationFiles.length > 0) {
+        locationFile = locationFiles[0];
+      }
+    }
+
     return {
       id: entry.name,
       name,
@@ -71,6 +81,7 @@ function generateManifest(): Manifest {
       images,
       hasFloorplan: fs.existsSync(floorplanPath),
       hasLocationData: fs.existsSync(locationDir),
+      locationFile,
     };
   });
 
@@ -80,7 +91,12 @@ function generateManifest(): Manifest {
   };
 }
 
-const manifest = generateManifest();
-fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
-console.log(`Generated manifest with ${manifest.spaces.length} spaces at ${outputPath}`);
-console.log(`Total images indexed: ${manifest.spaces.reduce((sum, s) => sum + s.images.length, 0)}`);
+// Only run when executed directly (not imported)
+if (require.main === module) {
+  const manifest = generateManifest();
+  fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
+  console.log(`Generated manifest with ${manifest.spaces.length} spaces at ${outputPath}`);
+  console.log(`Total images indexed: ${manifest.spaces.reduce((sum, s) => sum + s.images.length, 0)}`);
+}
+
+export type { SpaceManifestEntry, Manifest };

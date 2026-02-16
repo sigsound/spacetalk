@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-16T20:36:16.516Z",
+  "generatedAt": "2026-02-16T20:55:44.007Z",
   "spaces": [
     {
       "id": "space1",
@@ -1410,7 +1410,8 @@
         "235606188023.jpg"
       ],
       "hasFloorplan": true,
-      "hasLocationData": true
+      "hasLocationData": true,
+      "locationFile": "235045429680.json"
     },
     {
       "id": "space2",
@@ -1488,7 +1489,8 @@
         "306321449349.jpg"
       ],
       "hasFloorplan": true,
-      "hasLocationData": true
+      "hasLocationData": true,
+      "locationFile": "306284283811.json"
     },
     {
       "id": "space3",
@@ -2014,7 +2016,8 @@
         "239782493357.jpg"
       ],
       "hasFloorplan": true,
-      "hasLocationData": true
+      "hasLocationData": true,
+      "locationFile": "239564119589.json"
     },
     {
       "id": "space4",
@@ -3132,7 +3135,8 @@
         "1251333332380.jpg"
       ],
       "hasFloorplan": false,
-      "hasLocationData": true
+      "hasLocationData": true,
+      "locationFile": "1251040394120.json"
     }
   ]
 }

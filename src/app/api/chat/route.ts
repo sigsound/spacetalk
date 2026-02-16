@@ -1,7 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
-import fs from "fs";
-import path from "path";
 import { sampleImages } from "@/lib/sampling";
 import manifest from "@/../public/data/spaces-manifest.json";
 
@@ -9,32 +7,34 @@ import { AnalysisType } from "@/lib/types";
 
 const anthropic = new Anthropic();
 
-// Helper to read JSON file safely
-function readJsonFile(filePath: string): object | null {
-  try {
-    if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    }
-  } catch (e) {
-    console.warn(`Failed to read JSON: ${filePath}`, e);
-  }
-  return null;
-}
-
-// Helper to read text file
-function readTextFile(filePath: string): string | null {
-  try {
-    if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath, "utf-8");
-    }
-  } catch (e) {
-    console.warn(`Failed to read text file: ${filePath}`, e);
-  }
-  return null;
-}
-
 // Sleep helper for retry logic
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Helper to fetch text file via HTTP
+async function fetchTextFile(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.text();
+    }
+  } catch (e) {
+    console.warn(`Failed to fetch: ${url}`, e);
+  }
+  return null;
+}
+
+// Helper to fetch JSON via HTTP
+async function fetchJsonFile(url: string): Promise<object | null> {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (e) {
+    console.warn(`Failed to fetch JSON: ${url}`, e);
+  }
+  return null;
+}
 
 // Resource files for each analysis type
 const RESOURCE_FILES: Record<AnalysisType, string[]> = {
@@ -223,13 +223,19 @@ export async function POST(req: NextRequest) {
     const contentBlocks: Anthropic.Messages.ContentBlockParam[] = [];
     let totalSampledImages = 0;
 
+    // Get base URL for fetching files from CDN
+    const baseUrl = req.headers.get("x-forwarded-host") 
+      ? `https://${req.headers.get("x-forwarded-host")}`
+      : req.headers.get("host")
+        ? `${req.headers.get("x-forwarded-proto") || "http"}://${req.headers.get("host")}`
+        : "http://localhost:3000";
+
     // Load reference resources for the analysis type (only on initial analysis)
     if (!isFollowUp && validAnalysisType) {
       const resourceFiles = RESOURCE_FILES[validAnalysisType];
-      const resourcesDir = path.join(process.cwd(), "public/data/resources");
       
       for (const resourceFile of resourceFiles) {
-        const resourceContent = readTextFile(path.join(resourcesDir, resourceFile));
+        const resourceContent = await fetchTextFile(`${baseUrl}/data/resources/${resourceFile}`);
         if (resourceContent) {
           contentBlocks.push({
             type: "text",
@@ -239,17 +245,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Get base URL for fetching images from CDN
-    const baseUrl = req.headers.get("x-forwarded-host") 
-      ? `https://${req.headers.get("x-forwarded-host")}`
-      : req.headers.get("host")
-        ? `${req.headers.get("x-forwarded-proto") || "http"}://${req.headers.get("host")}`
-        : "http://localhost:3000";
-
     for (const spacePath of selectedSpaces) {
-      const spaceDir = path.join(process.cwd(), "public/data/spaces", spacePath);
-      const locationDir = path.join(spaceDir, "location");
-      
       // Get space info from manifest
       const spaceManifest = manifest.spaces.find(s => s.id === spacePath);
 
@@ -258,27 +254,27 @@ export async function POST(req: NextRequest) {
         text: `\n=== SPACE: ${spacePath} ===`
       });
 
-      // Read floorplan.csv - small text file, OK to use fs
-      const floorplanPath = path.join(spaceDir, "floorplan.csv");
-      if (fs.existsSync(floorplanPath)) {
-        const csvContent = fs.readFileSync(floorplanPath, "utf-8");
-        contentBlocks.push({
-          type: "text",
-          text: `\n--- Floor Plan Data (floorplan.csv) ---\n${csvContent}`
-        });
+      // Fetch floorplan.csv via HTTP if it exists
+      if (spaceManifest?.hasFloorplan) {
+        const csvContent = await fetchTextFile(`${baseUrl}/data/spaces/${spacePath}/floorplan.csv`);
+        if (csvContent) {
+          contentBlocks.push({
+            type: "text",
+            text: `\n--- Floor Plan Data (floorplan.csv) ---\n${csvContent}`
+          });
+        }
       }
 
-      // Load location data - small JSON file, OK to use fs
-      if (fs.existsSync(locationDir)) {
-        const locationFiles = fs.readdirSync(locationDir).filter(f => f.endsWith(".json"));
-        if (locationFiles.length > 0) {
-          const locationData = readJsonFile(path.join(locationDir, locationFiles[0]));
-          if (locationData) {
-            contentBlocks.push({
-              type: "text",
-              text: `\n--- Location Data ---\n${JSON.stringify(locationData, null, 2)}`
-            });
-          }
+      // Fetch location data via HTTP if it exists
+      if (spaceManifest?.hasLocationData && spaceManifest?.locationFile) {
+        const locationData = await fetchJsonFile(
+          `${baseUrl}/data/spaces/${spacePath}/location/${spaceManifest.locationFile}`
+        );
+        if (locationData) {
+          contentBlocks.push({
+            type: "text",
+            text: `\n--- Location Data ---\n${JSON.stringify(locationData, null, 2)}`
+          });
         }
       }
 
