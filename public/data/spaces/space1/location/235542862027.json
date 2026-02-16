@@ -1,0 +1,26 @@
+{
+  "placemark" : {
+    "subLocality" : "Hough",
+    "subThoroughfare" : "513",
+    "postalCode" : "98660",
+    "isoCountryCode" : "US",
+    "subAdministrativeArea" : "Clark County",
+    "administrativeArea" : "WA",
+    "thoroughfare" : "W Fourth Plain Blvd",
+    "name" : "513 W Fourth Plain Blvd",
+    "country" : "United States",
+    "locality" : "Vancouver"
+  },
+  "location" : {
+    "horizontalAccuracy" : 3.2427643210026362,
+    "altitude" : 36.3608721671626,
+    "verticalAccuracy" : 5.106841905447241,
+    "longitude" : -122.67645546403268,
+    "timestamp" : 1770748758.9985986,
+    "latitude" : 45.64004226431952
+  },
+  "heading" : {
+    "trueHeading" : 178.45492553710938,
+    "headingAccuracy" : 37.86515426635742
+  }
+}

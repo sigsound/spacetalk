@@ -1,0 +1,30 @@
+Room,Description,Value
+Entire Roomplan,Address,513 W Fourth Plain Blvd Vancouver WA
+Entire Roomplan,Latitude,45.640115 m
+Entire Roomplan,Longitude,-122.676429 m
+Entire Roomplan,Altitude [ft],114' 10.1"
+Entire Roomplan,Total exterior floor area [ft^2],561.6
+Entire Roomplan,Total livable floor area [ft^2],552.9
+Other,Floor area [ft^2],552.9
+Other,Dimensions [ft],26' 8.4" x 20' 8.5"
+Entire Roomplan,Wall area [ft^2],305.4
+Other,Wall area [ft^2],305.4
+Entire Roomplan,Volume [ft^3],8660.67
+Other,Volume [ft^3] (approx),8660.67 
+Other,Ceiling height [ft] (approx),15' 8.0" 
+Entire Roomplan,Total perimeter in rooms [ft],94' 9.8"
+Other,Perimeter [ft],94' 9.8"
+Other,Doors total casing length [ft],24' 5.7"
+Other,Windows total casing length [ft],21' 1.9"
+Entire Roomplan,Total window area [ft^2],25.2
+Other,Window dimensions [ft],5' 3.4" x 4' 9.2"
+Other,Door dimensions [ft],3' 1.6" x 10' 4.9"
+Entire Roomplan,# Stairs,1
+Other,Stairs dimensions (w x h x d) [ft],5' 8.8" x 2' 7.8" x 3' 9.0"
+Key,Dimensions (bounding box),Smallest rectangle that contains the room
+Key,Dimensions (inscribed),Largest rectangle that fits inside the room
+Key,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions
+Settings,Wall thickness [ft],0' 3.9"
+Settings,Doors casing width [ft],0' 1.6"
+Settings,Windows casing width [ft],0' 1.6"
+Settings,Each room area method,Internal wall area excluded

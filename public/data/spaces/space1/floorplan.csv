@@ -1,0 +1,240 @@
+Floor,Room,Description,Value
+All,Entire Roomplan,Name,Extra Special Floor Plan
+All,Entire Roomplan,Address,513 W Fourth Plain Blvd Vancouver WA
+All,Entire Roomplan,Latitude,45.639999 m
+All,Entire Roomplan,Longitude,-122.676437 m
+All,Entire Roomplan,Altitude [ft],116' 9.5"
+All,Entire Roomplan,Total exterior floor area [ft^2],1593.2
+Floor 1,Entire Floor,Total exterior floor area [ft^2],1107.4
+Floor 2,Entire Floor,Total exterior floor area [ft^2],485.7
+All,Entire Roomplan,Total livable floor area [ft^2],1457.0
+Floor 1,Entire Floor,Total livable floor area [ft^2],1011.5
+Floor 2,Entire Floor,Total livable floor area [ft^2],445.5
+Floor 2,Home Office,Floor area [ft^2],326.9
+Floor 1,Other 1,Floor area [ft^2],188.7
+Floor 1,Living Room 2,Floor area [ft^2],171.5
+Floor 1,Other 2,Floor area [ft^2],118.9
+Floor 1,Bedroom 1,Floor area [ft^2],114.1
+Floor 1,Kitchen (1),Floor area [ft^2],112.7
+Floor 2,Other 3,Floor area [ft^2],91.2
+Floor 1,Bedroom 2,Floor area [ft^2],81.8
+Floor 1,Bathroom 1,Floor area [ft^2],47.3
+Floor 1,Foyer,Floor area [ft^2],42.6
+Floor 1,Mud Room,Floor area [ft^2],37.7
+Floor 1,Stairway,Floor area [ft^2],32.5
+Floor 1,Other 7,Floor area [ft^2],28.8
+Floor 2,Bathroom 2,Floor area [ft^2],27.4
+Floor 1,Closet,Floor area [ft^2],21.3
+Floor 1,Other 9,Floor area [ft^2],13.7
+Floor 2,Home Office,Dimensions (bounding box) [ft],26' 4.5" x 12' 6.1"
+Floor 2,Home Office,Dimensions (inscribed) [ft],26' 4.5" x 10' 7.8"
+Floor 1,Other 1,Dimensions [ft],16' 4.9" x 11' 6.0"
+Floor 1,Living Room 2,Dimensions [ft],14' 1.4" x 12' 1.7"
+Floor 2,Other 3,Dimensions (bounding box) [ft],12' 6.4" x 9' 9.1"
+Floor 2,Other 3,Dimensions (inscribed) [ft],9' 9.1" x 7' 7.4"
+Floor 1,Other 2,Dimensions (bounding box) [ft],11' 8.4" x 10' 3.7"
+Floor 1,Other 2,Dimensions (inscribed) [ft],11' 8.4" x 10' 1.6"
+Floor 1,Kitchen (1),Dimensions (bounding box) [ft],11' 7.7" x 10' 2.6"
+Floor 1,Kitchen (1),Dimensions (inscribed) [ft],11' 7.7" x 8' 2.8"
+Floor 1,Bedroom 1,Dimensions [ft],11' 8.7" x 9' 8.8"
+Floor 1,Bedroom 2,Dimensions (bounding box) [ft],9' 5.4" x 8' 9.6"
+Floor 1,Bedroom 2,Dimensions (inscribed) [ft],9' 5.4" x 8' 7.8"
+Floor 1,Bathroom 1,Dimensions [ft],7' 1.0" x 6' 8.1"
+Floor 1,Foyer,Dimensions [ft],8' 7.6" x 4' 11.3"
+Floor 1,Mud Room,Dimensions (bounding box) [ft],7' 4.0" x 5' 3.8"
+Floor 1,Mud Room,Dimensions (inscribed) [ft],7' 4.0" x 4' 11.8"
+Floor 1,Stairway,Dimensions [ft],10' 0.7" x 3' 2.7"
+Floor 1,Other 7,Dimensions [ft],6' 8.1" x 4' 3.8"
+Floor 2,Bathroom 2,Dimensions [ft],6' 0.1" x 4' 6.8"
+Floor 1,Closet,Dimensions (bounding box) [ft],5' 3.8" x 4'
+Floor 1,Closet,Dimensions (inscribed) [ft],5' 3.8" x 4'
+Floor 1,Other 9,Dimensions (bounding box) [ft],5' 3.7" x 2' 8.0"
+Floor 1,Other 9,Dimensions (inscribed) [ft],5' 1.9" x 2' 8.0"
+All,Entire Roomplan,Wall area [ft^2],3479.8
+Floor 1,Entire Floor,Wall area [ft^2],2763.9
+Floor 2,Entire Floor,Wall area [ft^2],715.9
+Floor 2,Home Office,Wall area [ft^2],380.8
+Floor 1,Kitchen (1),Wall area [ft^2],317.4
+Floor 1,Other 1,Wall area [ft^2],312.7
+Floor 1,Living Room 2,Wall area [ft^2],311.1
+Floor 1,Bedroom 1,Wall area [ft^2],300.3
+Floor 1,Bedroom 2,Wall area [ft^2],267.4
+Floor 1,Other 2,Wall area [ft^2],223.6
+Floor 1,Bathroom 1,Wall area [ft^2],223.2
+Floor 2,Other 3,Wall area [ft^2],222.8
+Floor 1,Stairway,Wall area [ft^2],178.4
+Floor 1,Foyer,Wall area [ft^2],137.4
+Floor 1,Closet,Wall area [ft^2],129.6
+Floor 1,Mud Room,Wall area [ft^2],128.7
+Floor 1,Other 9,Wall area [ft^2],117.5
+Floor 1,Other 7,Wall area [ft^2],116.7
+Floor 2,Bathroom 2,Wall area [ft^2],112.3
+All,Entire Roomplan,Volume [ft^3],11217.44
+Floor 1,Entire Floor,Volume [ft^3],8482.62
+Floor 2,Entire Floor,Volume [ft^3],2734.81
+Floor 2,Home Office,Volume [ft^3],1960.66 
+Floor 1,Other 1,Volume [ft^3],1597.94 
+Floor 1,Living Room 2,Volume [ft^3],1451.72 
+Floor 1,Other 2,Volume [ft^3],1006.34 
+Floor 1,Bedroom 1,Volume [ft^3],965.98 
+Floor 1,Kitchen (1),Volume [ft^3],954.11 
+Floor 1,Bedroom 2,Volume [ft^3],692.21 
+Floor 2,Other 3,Volume [ft^3],616.22 
+Floor 1,Bathroom 1,Volume [ft^3],400.45 
+Floor 1,Foyer,Volume [ft^3],360.93 
+Floor 1,Stairway,Volume [ft^3] (approx),274.83 
+Floor 1,Mud Room,Volume [ft^3],267.24 
+Floor 1,Other 7,Volume [ft^3],243.75 
+Floor 2,Bathroom 2,Volume [ft^3],157.93 
+Floor 1,Closet,Volume [ft^3],150.76 
+Floor 1,Other 9,Volume [ft^3] (approx),116.36 
+Floor 2,Home Office,Ceiling height [ft],4' 1.5" - 6' 11.7" 
+Floor 1,Other 1,Ceiling height [ft],8' 5.6" 
+Floor 1,Living Room 2,Ceiling height [ft],8' 5.6" 
+Floor 1,Other 2,Ceiling height [ft],8' 5.6" 
+Floor 1,Bedroom 1,Ceiling height [ft],8' 5.6" 
+Floor 1,Kitchen (1),Ceiling height [ft],8' 5.6" 
+Floor 1,Bedroom 2,Ceiling height [ft],8' 5.6" 
+Floor 2,Other 3,Ceiling height [ft],4' 3.0" - 6' 11.7" 
+Floor 1,Bathroom 1,Ceiling height [ft],8' 5.6" 
+Floor 1,Foyer,Ceiling height [ft],8' 5.6" 
+Floor 1,Stairway,Ceiling height [ft] (approx),8' 5.6" 
+Floor 1,Mud Room,Ceiling height [ft],7' 1.1" 
+Floor 1,Other 7,Ceiling height [ft],8' 5.6" 
+Floor 2,Bathroom 2,Ceiling height [ft],4' 1.9" - 6' 11.7" 
+Floor 1,Closet,Ceiling height [ft],7' 1.1" 
+Floor 1,Other 9,Ceiling height [ft] (approx),8' 5.6" 
+All,Entire Roomplan,Total perimeter in rooms [ft],589' 1.4"
+Floor 1,Entire Floor,Total perimeter in rooms [ft],441' 10.8"
+Floor 2,Entire Floor,Total perimeter in rooms [ft],147' 2.6"
+Floor 2,Home Office,Perimeter [ft],81' 5.8"
+Floor 1,Other 1,Perimeter [ft],55' 9.9"
+Floor 1,Living Room 2,Perimeter [ft],52' 6.3"
+Floor 1,Kitchen (1),Perimeter [ft],47' 0.4"
+Floor 2,Other 3,Perimeter [ft],44' 7.1"
+Floor 1,Other 2,Perimeter [ft],44' 0.1"
+Floor 1,Bedroom 1,Perimeter [ft],42' 11.0"
+Floor 1,Bedroom 2,Perimeter [ft],36' 6.0"
+Floor 1,Bathroom 1,Perimeter [ft],27' 6.3"
+Floor 1,Foyer,Perimeter [ft],27' 1.7"
+Floor 1,Stairway,Perimeter [ft],26' 6.8"
+Floor 1,Mud Room,Perimeter [ft],25' 3.5"
+Floor 1,Other 7,Perimeter [ft],21' 11.7"
+Floor 2,Bathroom 2,Perimeter [ft],21' 1.7"
+Floor 1,Closet,Perimeter [ft],18' 7.6"
+Floor 1,Other 9,Perimeter [ft],15' 11.3"
+Floor 1,Other 7,Doors total casing length [ft],67' 6.4"
+Floor 1,Other 2,Doors total casing length [ft],35' 2.1"
+Floor 1,Foyer,Doors total casing length [ft],34' 1.7"
+Floor 1,Bedroom 1,Doors total casing length [ft],33' 10.2"
+Floor 1,Other 9,Doors total casing length [ft],17' 7.0"
+Floor 1,Kitchen (1),Doors total casing length [ft],17' 1.2"
+Floor 1,Stairway,Doors total casing length [ft],17' 1.2"
+Floor 1,Mud Room,Doors total casing length [ft],16' 8.9"
+Floor 1,Bedroom 2,Doors total casing length [ft],16' 5.9"
+Floor 1,Other 1,Doors total casing length [ft],16' 3.5"
+Floor 2,Other 3,Doors total casing length [ft],16' 1.8"
+Floor 2,Bathroom 2,Doors total casing length [ft],16' 1.8"
+Floor 1,Closet,Doors total casing length [ft],16'
+Floor 1,Bathroom 1,Doors total casing length [ft],15' 9.5"
+Floor 1,Living Room 2,Windows total casing length [ft],44' 10.2"
+Floor 1,Bedroom 1,Windows total casing length [ft],35' 7.9"
+Floor 1,Kitchen (1),Windows total casing length [ft],35' 7.6"
+Floor 1,Bedroom 2,Windows total casing length [ft],33' 3.7"
+Floor 1,Mud Room,Windows total casing length [ft],29' 5.6"
+Floor 1,Other 1,Windows total casing length [ft],28' 7.7"
+Floor 2,Other 3,Windows total casing length [ft],12' 0.3"
+Floor 2,Home Office,Windows total casing length [ft],11' 11.7"
+Floor 1,Bathroom 1,Windows total casing length [ft],11' 11.6"
+Floor 1,Closet,Windows total casing length [ft],8' 4.0"
+All,Entire Roomplan,Total window area [ft^2],235.1
+Floor 1,Entire Floor,Total window area [ft^2],221.3
+Floor 2,Entire Floor,Total window area [ft^2],13.8
+Floor 1,Other 1,Window dimensions [ft],8' 8.6" x 5' 1.0"
+Floor 1,Living Room 2,Window dimensions [ft],6' 4.3" x 4' 5.1"
+Floor 1,Living Room 2,Window dimensions [ft],5' 3.7" x 5' 3.4"
+Floor 1,Bedroom 2,Window dimensions [ft],5' 4.1" x 5' 1.7"
+Floor 1,Mud Room,Window dimensions [ft],6' 10.3" x 2' 6.9"
+Floor 1,Bedroom 1,Window dimensions [ft],4' 4.3" x 3' 11.9"
+Floor 1,Bedroom 1,Window dimensions [ft],3' 2.9" x 5' 2.3"
+Floor 1,Kitchen (1),Window dimensions [ft],2' 2.3" x 4' 0.6"
+Floor 1,Bathroom 1,Window dimensions [ft],2' 5.4" x 3' 0.1"
+Floor 2,Other 3,Window dimensions [ft],3' 6.0" x 1' 11.9"
+Floor 2,Home Office,Window dimensions [ft],3' 6.0" x 1' 11.5"
+Floor 1,Kitchen (1),Window dimensions [ft],1' 11.1" x 3' 2.6"
+Floor 1,Bedroom 2,Window dimensions [ft],3' 2.5" x 1' 11.0"
+Floor 1,Kitchen (1),Window dimensions [ft],1' 9.7" x 3' 0.7"
+Floor 1,Mud Room,Window dimensions [ft],1' 7.3" x 2' 7.6"
+Floor 1,Closet,Window dimensions [ft],2' 2.7" x 1' 4.9"
+Floor 1,Bedroom 1,Door dimensions [ft],4' 0.1" x 6' 7.9"
+Floor 1,Other 2,Door dimensions [ft],3' 9.0" x 6' 7.9"
+Floor 1,Other 2,Door dimensions [ft],3' 2.0" x 6' 11.4"
+Floor 1,Foyer,Door dimensions [ft],3' 0.1" x 7' 0.7"
+Floor 1,Kitchen (1),Door dimensions [ft],2' 8.3" x 6' 11.3"
+Floor 1,Mud Room,Door dimensions [ft],2' 5.7" x 6' 10.5"
+Floor 1,Bedroom 2,Door dimensions [ft],2' 5.8" x 6' 8.9"
+Floor 1,Other 1,Door dimensions [ft],2' 4.4" x 6' 8.4"
+Floor 2,Other 3,Door dimensions [ft],2' 0.8" x 6' 9.3"
+Floor 1,Bathroom 1,Door dimensions [ft],2' 1.0" x 6' 7.1"
+Floor 1,Bedroom 1,Door dimensions [ft],2' 0.4" x 6' 8.7"
+All,Entire Roomplan,# Cabinets,10
+All,Entire Roomplan,# Desks,4
+All,Entire Roomplan,# Side tables,4
+All,Entire Roomplan,# Toilets,2
+All,Entire Roomplan,# Beds,2
+All,Entire Roomplan,# Sinks,2
+All,Entire Roomplan,# Sofa doubles,2
+All,Entire Roomplan,# Stairs,2
+All,Entire Roomplan,# Bathtubs,1
+All,Entire Roomplan,# Bar stools,1
+All,Entire Roomplan,# Dining tables,1
+All,Entire Roomplan,# Fridges,1
+All,Entire Roomplan,# Kitchen islands,1
+All,Entire Roomplan,# Ovens,1
+All,Entire Roomplan,# Sofa extensions,1
+All,Entire Roomplan,# TVs,1
+All,Entire Roomplan,# Task chairs,1
+Floor 2,Home Office,Cabinet dimensions (w x h x d) [ft],6' 6.5" x 2' 11.5" x 3' 0.9"
+Floor 1,Kitchen (1),Cabinet dimensions (w x h x d) [ft],6' 9.9" x 3' 0.6" x 2' 3.7"
+Floor 2,Home Office,Cabinet dimensions (w x h x d) [ft],2' 7.0" x 6' 6.7" x 1' 7.7"
+Floor 1,Mud Room,Cabinet dimensions (w x h x d) [ft],3' 2.8" x 5' 7.3" x 1' 4.5"
+Floor 1,Other 1,Cabinet dimensions (w x h x d) [ft],4' 8.6" x 2' 1.2" x 1' 8.9"
+Floor 1,Bathroom 1,Cabinet dimensions (w x h x d) [ft],1' 10.1" x 6' 1.9" x 1' 4.4"
+Floor 1,Living Room 2,Cabinet dimensions (w x h x d) [ft],3' 7.0" x 2' 3.5" x 1' 9.0"
+Floor 1,Kitchen (1),Cabinet dimensions (w x h x d) [ft],2' 10.1" x 3' 2.8" x 1' 4.3"
+Floor 1,Bedroom 1,Cabinet dimensions (w x h x d) [ft],2' 5.0" x 2' 5.3" x 1' 7.8"
+Floor 1,Bedroom 1,Cabinet dimensions (w x h x d) [ft],1' 7.1" x 2' 5.3" x 2' 0.6"
+Floor 1,Other 2,Side table dimensions (w x h x d) [ft],6' 5.6" x 5' 5.4" x 1' 3.1"
+Floor 1,Other 2,Desk dimensions (w x h x d) [ft],4' 8.2" x 2' 9.3" x 2' 8.3"
+Floor 2,Home Office,Desk dimensions (w x h x d) [ft],3' 9.0" x 2' 11.7" x 2' 7.9"
+Floor 2,Home Office,Desk dimensions (w x h x d) [ft],3' 8.4" x 3' 3.5" x 2' 1.6"
+Floor 2,Home Office,Side table dimensions (w x h x d) [ft],2' 7.0" x 5' 9.0" x 1' 5.7"
+Floor 1,Other 2,Side table dimensions (w x h x d) [ft],1' 6.7" x 4' 5.3" x 1' 3.0"
+Floor 2,Home Office,Desk dimensions (w x h x d) [ft],1' 9.5" x 2' 10.8" x 1' 5.2"
+Floor 1,Other 2,Side table dimensions (w x h x d) [ft],3' 11.6" x 5' 7.3" x 0' 2.9"
+Floor 1,Bedroom 1,Bed dimensions (w x h x d) [ft],6' 3.6" x 2' 4.4" x 7' 1.0"
+Floor 1,Living Room 2,Sofa double dimensions (w x h x d) [ft],10' 5.3" x 2' 9.6" x 3' 4.6"
+Floor 1,Bedroom 2,Bed dimensions (w x h x d) [ft],5' 4.1" x 2' 5.6" x 6' 10.9"
+Floor 1,Stairway,Stairs dimensions (w x h x d) [ft],3' 1.6" x 5' 0.8" x 4' 11.2"
+Floor 1,Foyer,Sofa double dimensions (w x h x d) [ft],4' 9.0" x 2' 8.0" x 2' 9.1"
+Floor 2,Bathroom 2,Toilet dimensions (w x h x d) [ft],1' 6.9" x 2' 10.5" x 3' 1.7"
+Floor 1,Bathroom 1,Toilet dimensions (w x h x d) [ft],1' 6.1" x 3' 0.6" x 2' 6.4"
+Floor 2,Home Office,Stairs dimensions (w x h x d) [ft],2' 11.5" x 0' 7.9" x 2' 1.6"
+Floor 1,Bathroom 1,Sink dimensions (w x h x d) [ft],2' 0.5" x 0' 11.8" x 1' 6.2"
+Floor 1,Kitchen (1),Sink dimensions (w x h x d) [ft],1' 11.4" x 0' 9.8" x 1' 6.8"
+Floor 1,Kitchen (1),Fridge dimensions (w x h x d) [ft],2' 5.5" x 5' 10.8" x 3' 2.1"
+Floor 2,Home Office,Task chair dimensions (w x h x d) [ft],2' 0.6" x 4' 5.2" x 2' 2.5"
+Floor 1,Living Room 2,Dining table dimensions (w x h x d) [ft],4' 5.4" x 1' 5.9" x 2' 5.7"
+Floor 1,Living Room 2,Sofa extension dimensions (w x h x d) [ft],3' 4.5" x 1' 5.8" x 3' 3.1"
+Floor 1,Bathroom 1,Bathtub dimensions (w x h x d) [ft],4' 3.8" x 1' 6.1" x 2' 5.8"
+Floor 1,Kitchen (1),Oven dimensions (w x h x d) [ft],2' 3.9" x 2' 10.9" x 2' 4.4"
+Floor 1,Kitchen (1),Kitchen island dimensions (w x h x d) [ft],3' 1.5" x 3' 2.3" x 1' 4.2"
+Floor 2,Home Office,Bar stool dimensions (w x h x d) [ft],1' 3.9" x 2' 4.5" x 1' 2.5"
+Floor 1,Living Room 2,TV dimensions (w x h x d) [ft],4' 2.5" x 2' 5.9" x 0' 2.4"
+Key,Dimensions (bounding box),Smallest rectangle that contains the room
+Key,Dimensions (inscribed),Largest rectangle that fits inside the room
+Key,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions
+Settings,Wall thickness [ft],0' 3.9"
+Settings,Doors casing width [ft],0' 1.6"
+Settings,Windows casing width [ft],0' 1.6"
+Settings,Each room area method,Internal wall area excluded

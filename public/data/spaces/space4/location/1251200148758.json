@@ -1,0 +1,25 @@
+{
+  "heading" : {
+    "headingAccuracy" : 10.996329307556152,
+    "trueHeading" : 233.4140167236328
+  },
+  "placemark" : {
+    "postalCode" : "49795",
+    "name" : "1133 Thumb Lake Rd",
+    "isoCountryCode" : "US",
+    "thoroughfare" : "Thumb Lake Rd",
+    "subAdministrativeArea" : "Otsego County",
+    "administrativeArea" : "MI",
+    "subThoroughfare" : "1133",
+    "locality" : "Vanderbilt",
+    "country" : "United States"
+  },
+  "location" : {
+    "horizontalAccuracy" : 4.708887777736941,
+    "verticalAccuracy" : 4.774504255142162,
+    "timestamp" : 1751573686.9996116,
+    "latitude" : 45.18180455376122,
+    "altitude" : 311.24499009456486,
+    "longitude" : -84.70032160906327
+  }
+}

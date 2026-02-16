@@ -1,0 +1,252 @@
+Floor,Room,Description,Value
+All,Entire Roomplan,Name,Awesome Polycam House
+All,Entire Roomplan,Address,1234 Main St Town USA
+All,Entire Roomplan,Latitude,45.181796 m
+All,Entire Roomplan,Longitude,-84.700309 m
+All,Entire Roomplan,Altitude [m],311
+All,Entire Roomplan,Total exterior floor area [m^2],144.2
+Floor 1,Entire Floor,Total exterior floor area [m^2],119.3
+Floor 2,Entire Floor,Total exterior floor area [m^2],24.9
+All,Entire Roomplan,Total livable floor area [m^2],131.7
+Floor 1,Entire Floor,Total livable floor area [m^2],109.4
+Floor 2,Entire Floor,Total livable floor area [m^2],22.3
+Floor 1,Living Room,Floor area [m^2],30.0
+Floor 2,Bedroom 1,Floor area [m^2],17.6
+Floor 1,Other 1,Floor area [m^2],14.2
+Floor 1,Bedroom 2,Floor area [m^2],13.8
+Floor 1,Kitchen,Floor area [m^2],13.0
+Floor 1,Dining Room,Floor area [m^2],10.2
+Floor 1,Bedroom 3,Floor area [m^2],10.1
+Floor 1,Laundry,Floor area [m^2],6.3
+Floor 1,Bathroom 1,Floor area [m^2],5.2
+Floor 1,Bathroom 2,Floor area [m^2],3.4
+Floor 2,Other 2,Floor area [m^2],2.6
+Floor 1,Other 3,Floor area [m^2],2.4
+Floor 2,Other 4,Floor area [m^2],2.2
+Floor 1,Other 5,Floor area [m^2],0.5
+Floor 1,Other 6,Floor area [m^2],0.2
+Floor 1,Living Room,Dimensions (bounding box) [m],6.6 x 4.8
+Floor 1,Living Room,Dimensions (inscribed) [m],5.8 x 4.8
+Floor 2,Bedroom 1,Dimensions (bounding box) [m],5.5 x 3.5
+Floor 2,Bedroom 1,Dimensions (inscribed) [m],3.9 x 3.5
+Floor 1,Bedroom 2,Dimensions (bounding box) [m],5.4 x 3.4
+Floor 1,Bedroom 2,Dimensions (inscribed) [m],3.7 x 3.4
+Floor 1,Kitchen,Dimensions (bounding box) [m],4.0 x 3.7
+Floor 1,Kitchen,Dimensions (inscribed) [m],4.0 x 2.5
+Floor 1,Other 1,Dimensions [m],4.1 x 3.4
+Floor 1,Bedroom 3,Dimensions (bounding box) [m],3.3 x 3.2
+Floor 1,Bedroom 3,Dimensions (inscribed) [m],3.3 x 3.1
+Floor 1,Dining Room,Dimensions [m],3.4 x 3.0
+Floor 1,Laundry,Dimensions [m],3.4 x 1.8
+Floor 1,Bathroom 1,Dimensions [m],3.7 x 1.4
+Floor 1,Bathroom 2,Dimensions (bounding box) [m],2.4 x 1.6
+Floor 1,Bathroom 2,Dimensions (inscribed) [m],2.4 x 1.2
+Floor 2,Other 2,Dimensions [m],2.5 x 1.0
+Floor 1,Other 3,Dimensions [m],2.6 x 0.9
+Floor 2,Other 4,Dimensions [m],2.6 x 0.8
+Floor 1,Other 5,Dimensions [m],1.0 x 0.5
+Floor 1,Other 6,Dimensions [m],0.7 x 0.3
+All,Entire Roomplan,Wall area [m^2],379.2
+Floor 1,Entire Floor,Wall area [m^2],278.4
+Floor 2,Entire Floor,Wall area [m^2],100.7
+Floor 2,Bedroom 1,Wall area [m^2],50.8
+Floor 1,Living Room,Wall area [m^2],41.2
+Floor 1,Bedroom 2,Wall area [m^2],32.5
+Floor 1,Bedroom 3,Wall area [m^2],31.4
+Floor 1,Dining Room,Wall area [m^2],28.0
+Floor 1,Other 1,Wall area [m^2],26.7
+Floor 2,Other 4,Wall area [m^2],26.5
+Floor 1,Bathroom 1,Wall area [m^2],25.2
+Floor 1,Laundry,Wall area [m^2],25.0
+Floor 1,Kitchen,Wall area [m^2],24.0
+Floor 2,Other 2,Wall area [m^2],23.4
+Floor 1,Bathroom 2,Wall area [m^2],20.5
+Floor 1,Other 3,Wall area [m^2],12.0
+Floor 1,Other 6,Wall area [m^2],6.3
+Floor 1,Other 5,Wall area [m^2],5.6
+All,Entire Roomplan,Volume [m^3],399.59
+Floor 1,Entire Floor,Volume [m^3],334.40
+Floor 2,Entire Floor,Volume [m^3],65.19
+Floor 1,Living Room,Volume [m^3],113.89 
+Floor 2,Bedroom 1,Volume [m^3],46.75 
+Floor 1,Bedroom 2,Volume [m^3],44.58 
+Floor 1,Other 1,Volume [m^3],34.77 
+Floor 1,Kitchen,Volume [m^3],31.99 
+Floor 1,Dining Room,Volume [m^3],31.86 
+Floor 1,Bedroom 3,Volume [m^3],31.64 
+Floor 1,Laundry,Volume [m^3],15.45 
+Floor 1,Bathroom 1,Volume [m^3],12.79 
+Floor 1,Bathroom 2,Volume [m^3],9.84 
+Floor 2,Other 4,Volume [m^3],9.27 
+Floor 2,Other 2,Volume [m^3],9.17 
+Floor 1,Other 3,Volume [m^3] (approx),5.93 
+Floor 1,Other 5,Volume [m^3] (approx),0.97 
+Floor 1,Other 6,Volume [m^3] (approx),0.68 
+Floor 1,Living Room,Ceiling height [m],2.3 - 4.9 
+Floor 2,Bedroom 1,Ceiling height [m],1.1 - 3.8 
+Floor 1,Bedroom 2,Ceiling height [m],2.6 - 3.7 
+Floor 1,Other 1,Ceiling height [m],2.5 
+Floor 1,Kitchen,Ceiling height [m],2.5 
+Floor 1,Dining Room,Ceiling height [m],2.4 - 3.8 
+Floor 1,Bedroom 3,Ceiling height [m],2.5 - 3.8 
+Floor 1,Laundry,Ceiling height [m],2.5 
+Floor 1,Bathroom 1,Ceiling height [m],2.5 
+Floor 1,Bathroom 2,Ceiling height [m],2.5 - 3.4 
+Floor 2,Other 4,Ceiling height [m],3.9 - 4.7 
+Floor 2,Other 2,Ceiling height [m],2.5 - 4.6 
+Floor 1,Other 3,Ceiling height [m] (approx),2.5 
+Floor 1,Other 5,Ceiling height [m] (approx),1.8 
+Floor 1,Other 6,Ceiling height [m] (approx),2.8 
+All,Entire Roomplan,Total perimeter in rooms [m],169.3
+Floor 1,Entire Floor,Total perimeter in rooms [m],137.4
+Floor 2,Entire Floor,Total perimeter in rooms [m],31.9
+Floor 1,Living Room,Perimeter [m],22.8
+Floor 2,Bedroom 1,Perimeter [m],18.0
+Floor 1,Bedroom 2,Perimeter [m],17.4
+Floor 1,Kitchen,Perimeter [m],15.4
+Floor 1,Other 1,Perimeter [m],15.1
+Floor 1,Bedroom 3,Perimeter [m],12.9
+Floor 1,Dining Room,Perimeter [m],12.8
+Floor 1,Laundry,Perimeter [m],10.5
+Floor 1,Bathroom 1,Perimeter [m],10.2
+Floor 1,Bathroom 2,Perimeter [m],7.9
+Floor 1,Other 3,Perimeter [m],7.1
+Floor 2,Other 2,Perimeter [m],7.0
+Floor 2,Other 4,Perimeter [m],6.9
+Floor 1,Other 5,Perimeter [m],3.1
+Floor 1,Other 6,Perimeter [m],2.1
+Floor 1,Other 1,Doors total casing length [m],21.1
+Floor 1,Bedroom 2,Doors total casing length [m],17.7
+Floor 1,Living Room,Doors total casing length [m],15.4
+Floor 1,Dining Room,Doors total casing length [m],10.3
+Floor 2,Bedroom 1,Doors total casing length [m],6.1
+Floor 2,Other 2,Doors total casing length [m],6.1
+Floor 1,Laundry,Doors total casing length [m],5.3
+Floor 1,Kitchen,Doors total casing length [m],5.2
+Floor 1,Bedroom 3,Doors total casing length [m],5.2
+Floor 1,Bathroom 2,Doors total casing length [m],5.1
+Floor 1,Bathroom 1,Doors total casing length [m],5.1
+Floor 1,Other 1,Windows total casing length [m],16.7
+Floor 1,Living Room,Windows total casing length [m],14.0
+Floor 1,Bedroom 2,Windows total casing length [m],13.7
+Floor 1,Bedroom 3,Windows total casing length [m],10.6
+Floor 2,Bedroom 1,Windows total casing length [m],5.0
+Floor 1,Dining Room,Windows total casing length [m],4.9
+Floor 1,Kitchen,Windows total casing length [m],4.2
+All,Entire Roomplan,Total window area [m^2],20.3
+Floor 1,Entire Floor,Total window area [m^2],19.1
+Floor 2,Entire Floor,Total window area [m^2],1.2
+Floor 1,Bedroom 2,Window dimensions [m],1.7 x 1.9
+Floor 1,Living Room,Window dimensions [m],1.7 x 1.5
+Floor 1,Living Room,Window dimensions [m],1.6 x 1.6
+Floor 1,Bedroom 2,Window dimensions [m],1.1 x 1.6
+Floor 1,Bedroom 3,Window dimensions [m],1.1 x 1.4
+Floor 1,Other 1,Window dimensions [m],0.9 x 1.6
+Floor 1,Other 1,Window dimensions [m],0.9 x 1.6
+Floor 1,Other 1,Window dimensions [m],0.8 x 1.6
+Floor 1,Bedroom 3,Window dimensions [m],0.9 x 1.4
+Floor 2,Bedroom 1,Window dimensions [m],0.9 x 1.4
+Floor 1,Dining Room,Window dimensions [m],0.9 x 1.2
+Floor 1,Kitchen,Window dimensions [m],0.9 x 0.9
+Floor 1,Bedroom 2,Door dimensions [m],2.8 x 2.2
+Floor 1,None,Door dimensions (w x h) [m],1.4 x 2.1
+Floor 2,Bedroom 1,Door dimensions [m],0.8 x 2.6
+Floor 1,Other 1,Door dimensions [m],0.9 x 2.1
+Floor 1,Other 1,Door dimensions [m],0.9 x 2.1
+Floor 1,Other 1,Door dimensions [m],0.8 x 2.1
+Floor 1,Living Room,Door dimensions [m],0.8 x 2.1
+Floor 1,Dining Room,Door dimensions [m],0.8 x 2.1
+Floor 1,Kitchen,Door dimensions [m],0.8 x 2.1
+Floor 1,Living Room,Door dimensions [m],0.8 x 2.0
+Floor 1,Bedroom 2,Door dimensions [m],0.8 x 2.0
+Floor 1,Living Room,Door dimensions [m],0.8 x 2.0
+Floor 1,Bedroom 2,Door dimensions [m],0.7 x 2.1
+All,Entire Roomplan,# Cabinets,16
+All,Entire Roomplan,# Chairs,8
+All,Entire Roomplan,# Dining chairs,5
+All,Entire Roomplan,# Dining tables,5
+All,Entire Roomplan,# Beds,4
+All,Entire Roomplan,# Sinks,4
+All,Entire Roomplan,# Washer/dryers,3
+All,Entire Roomplan,# Side tables,3
+All,Entire Roomplan,# Sofa singles,2
+All,Entire Roomplan,# Stairs,2
+All,Entire Roomplan,# TVs,2
+All,Entire Roomplan,# Toilets,2
+All,Entire Roomplan,# Bathtubs,1
+All,Entire Roomplan,# Dishwashers,1
+All,Entire Roomplan,# Fireplaces,1
+All,Entire Roomplan,# Fridges,1
+All,Entire Roomplan,# Ovens,1
+All,Entire Roomplan,# Sofa doubles,1
+All,Entire Roomplan,# Stoves,1
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],2.2 x 0.8 x 0.4
+Floor 1,Bathroom 1,Cabinet dimensions (w x h x d) [m],0.6 x 2.1 x 0.6
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],1.0 x 1.0 x 0.6
+Floor 1,Bathroom 1,Cabinet dimensions (w x h x d) [m],1.1 x 0.8 x 0.6
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],0.7 x 1.0 x 0.7
+Floor 1,Bedroom 2,Cabinet dimensions (w x h x d) [m],1.0 x 0.7 x 0.6
+Floor 1,Laundry,Cabinet dimensions (w x h x d) [m],0.7 x 0.9 x 0.6
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],0.6 x 1.1 x 0.6
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],0.6 x 1.1 x 0.6
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],0.5 x 1.0 x 0.7
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],1.0 x 0.8 x 0.3
+Floor 1,Other 5,Cabinet dimensions (w x h x d) [m],0.8 x 0.5 x 0.5
+Floor 1,Bathroom 2,Cabinet dimensions (w x h x d) [m],0.6 x 0.8 x 0.5
+Floor 1,Bathroom 2,Cabinet dimensions (w x h x d) [m],0.6 x 0.7 x 0.3
+Floor 1,Laundry,Cabinet dimensions (w x h x d) [m],0.9 x 0.4 x 0.3
+Floor 1,Kitchen,Cabinet dimensions (w x h x d) [m],0.5 x 0.4 x 0.4
+Floor 1,Dining Room,Chair dimensions (w x h x d) [m],0.5 x 1.0 x 0.6
+Floor 1,Kitchen,Chair dimensions (w x h x d) [m],0.5 x 1.0 x 0.5
+Floor 1,Kitchen,Chair dimensions (w x h x d) [m],0.5 x 1.0 x 0.5
+Floor 1,Kitchen,Chair dimensions (w x h x d) [m],0.5 x 1.0 x 0.5
+Floor 1,Other 1,Chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.5
+Floor 1,Other 1,Chair dimensions (w x h x d) [m],0.5 x 0.8 x 0.5
+Floor 1,Other 1,Chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.5
+Floor 1,Other 1,Chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.5
+Floor 1,Dining Room,Dining table dimensions (w x h x d) [m],1.7 x 0.8 x 1.1
+Floor 1,Living Room,Dining table dimensions (w x h x d) [m],1.1 x 0.5 x 0.9
+Floor 1,Dining Room,Dining chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.6
+Floor 1,Dining Room,Dining chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.6
+Floor 1,Dining Room,Dining chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.6
+Floor 1,Dining Room,Dining chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.5
+Floor 1,Dining Room,Dining chair dimensions (w x h x d) [m],0.5 x 0.9 x 0.5
+Floor 1,Living Room,Dining table dimensions (w x h x d) [m],0.5 x 0.7 x 0.5
+Floor 1,Living Room,Dining table dimensions (w x h x d) [m],0.5 x 0.7 x 0.5
+Floor 1,Bedroom 3,Dining table dimensions (w x h x d) [m],0.5 x 0.5 x 0.4
+Floor 2,Bedroom 1,Bed dimensions (w x h x d) [m],1.3 x 1.3 x 2.4
+Floor 2,Bedroom 1,Bed dimensions (w x h x d) [m],1.1 x 1.5 x 2.1
+Floor 1,Bedroom 2,Bed dimensions (w x h x d) [m],2.1 x 0.7 x 2.2
+Floor 1,Bedroom 3,Bed dimensions (w x h x d) [m],1.6 x 0.7 x 2.4
+Floor 1,Kitchen,Sink dimensions (w x h x d) [m],0.5 x 0.2 x 0.4
+Floor 1,Laundry,Sink dimensions (w x h x d) [m],0.5 x 0.2 x 0.5
+Floor 1,Bathroom 1,Sink dimensions (w x h x d) [m],0.6 x 0.2 x 0.4
+Floor 1,Bathroom 2,Sink dimensions (w x h x d) [m],0.5 x 0.1 x 0.4
+Floor 1,Other 1,Side table dimensions (w x h x d) [m],1.4 x 1.9 x 0.6
+Floor 1,Laundry,Washer/dryer dimensions (w x h x d) [m],0.7 x 1.0 x 0.9
+Floor 1,Laundry,Washer/dryer dimensions (w x h x d) [m],0.7 x 1.0 x 0.9
+Floor 1,Bedroom 3,Side table dimensions (w x h x d) [m],0.5 x 1.7 x 0.4
+Floor 1,Laundry,Washer/dryer dimensions (w x h x d) [m],0.5 x 0.9 x 0.6
+Floor 1,Kitchen,Side table dimensions (w x h x d) [m],0.3 x 0.8 x 0.2
+Floor 1,Living Room,Sofa single dimensions (w x h x d) [m],1.1 x 0.8 x 1.0
+Floor 1,Living Room,Sofa single dimensions (w x h x d) [m],1.0 x 0.9 x 1.0
+Floor 1,Other 3,Stairs dimensions (w x h x d) [m],0.8 x 0.8 x 1.0
+Floor 1,Bathroom 2,Toilet dimensions (w x h x d) [m],0.4 x 0.9 x 0.8
+Floor 1,Bathroom 1,Toilet dimensions (w x h x d) [m],0.4 x 0.9 x 0.7
+Floor 2,Other 2,Stairs dimensions (w x h x d) [m],1.0 x 0.2 x 1.0
+Floor 1,Living Room,TV dimensions (w x h x d) [m],1.2 x 0.7 x 0.1
+Floor 1,Bedroom 2,TV dimensions (w x h x d) [m],0.9 x 0.6 x 0.1
+Floor 1,Living Room,Fireplace dimensions (w x h x d) [m],1.6 x 1.6 x 1.0
+Floor 1,Living Room,Sofa double dimensions (w x h x d) [m],2.4 x 0.9 x 1.0
+Floor 1,Kitchen,Fridge dimensions (w x h x d) [m],0.8 x 1.8 x 0.8
+Floor 1,Kitchen,Oven dimensions (w x h x d) [m],0.7 x 1.0 x 0.7
+Floor 1,Bathroom 1,Bathtub dimensions (w x h x d) [m],1.4 x 0.4 x 0.8
+Floor 1,Kitchen,Dishwasher dimensions (w x h x d) [m],0.6 x 1.0 x 0.6
+Floor 1,Kitchen,Stove dimensions (w x h x d) [m],0.7 x 0.0 x 0.7
+Key,Dimensions (bounding box),Smallest rectangle that contains the room
+Key,Dimensions (inscribed),Largest rectangle that fits inside the room
+Key,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions
+Settings,Wall thickness [m],0.100
+Settings,Doors casing width [m],0.062
+Settings,Windows casing width [m],0.070
+Settings,Each room area method,Internal wall area excluded

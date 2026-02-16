@@ -1,0 +1,658 @@
+================================================================================
+ADA ACCESSIBILITY COMPLIANCE REFERENCE
+For Visual Space Analysis — Commercial & Public Facilities
+================================================================================
+
+Source: Compiled from the 2010 ADA Standards for Accessible Design (DOJ),
+ADA Checklist for Existing Facilities (New England ADA Center / ADA National
+Network), U.S. Access Board guides, and state-specific codes for Washington
+and Michigan.
+
+This document is structured for use by an AI vision system analyzing
+photographs and 3D scan data of physical spaces. Each section includes the
+specific dimensional requirements and visual indicators to look for.
+
+Last updated: February 2026
+
+================================================================================
+SECTION 1: PRIORITY 1 — ACCESSIBLE APPROACH & ENTRANCE
+================================================================================
+
+1.1 ROUTE OF TRAVEL (2010 Standards §402, §403)
+------------------------------------------------
+Visual Indicators: Pathways, sidewalks, corridors leading to building entrance
+
+- Accessible route must not require use of stairs
+- Route must be stable, firm, and slip-resistant
+- Minimum clear width: 36 inches (915 mm)
+- Passing space: 60 inches (1525 mm) width at intervals of 200 feet max
+- Cross slope: 1:48 maximum
+- Running slope: 1:20 maximum (steeper = ramp requirements apply)
+- Changes in level up to 1/4 inch may be vertical
+- Changes between 1/4 inch and 1/2 inch must be beveled 1:2
+
+Protruding Objects (§307):
+- Objects on walls with edges between 27-80 inches above floor must not
+  protrude more than 4 inches into circulation path
+- Objects below 27 inches may protrude any amount (cane-detectable)
+- Objects above 80 inches may protrude any amount (head clearance)
+- Free-standing objects on posts must have edges ≤27 inches or ≥80 inches
+  above ground, OR protrude ≤12 inches
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Steps or level changes in the approach path
+- Narrow passages, obstructions in walkways
+- Objects mounted on walls at head height (signs, planters, fire extinguishers)
+- Uneven or broken pavement, gravel surfaces
+- Steep slopes without ramp features
+
+1.2 RAMPS (2010 Standards §405)
+-------------------------------
+Visual Indicators: Sloped surfaces with or without handrails
+
+- Maximum slope: 1:12 (8.33% grade — 1 inch rise per 12 inches length)
+- Maximum rise per run: 30 inches
+- Minimum clear width between handrails: 36 inches
+- Landings required at top, bottom, and every 30 inches of rise
+- Landing length: minimum 60 inches
+- Landing width: at least as wide as the ramp
+- Handrails required on both sides if rise > 6 inches or run > 72 inches
+- Handrail height: 34-38 inches above ramp surface
+- Handrail extensions: 12 inches beyond top and bottom of ramp
+- Edge protection required (curbs, walls, or railings)
+- Surface must be slip-resistant
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Ramps that appear too steep (>8.33%)
+- Missing handrails on one or both sides
+- Handrails that end abruptly at top/bottom without extensions
+- Missing landings on long ramps
+- Narrow ramps (less than 36 inches between rails)
+- Lack of edge protection (no curbs or barriers at sides)
+
+1.3 PARKING (2010 Standards §502)
+---------------------------------
+Visual Indicators: Parking lots, striped spaces, signs
+
+Minimum number of accessible spaces:
+  Total Spaces    Required Accessible
+  1-25            1
+  26-50           2
+  51-75           3
+  76-100          4
+  101-150         5
+  151-200         6
+  201-300         7
+  301-400         8
+  401-500         9
+  501-1000        2% of total
+
+Van-accessible: At least 1 of every 6 accessible spaces (or fraction)
+
+Standard accessible space: 96 inches (8 feet) wide minimum
+Access aisle: 60 inches (5 feet) wide minimum
+Van-accessible space: 132 inches (11 feet) wide, OR 96 inches wide with
+  96-inch access aisle
+Van vertical clearance: 98 inches (8 feet 2 inches) minimum
+
+- Spaces and aisles must be level (1:48 max slope in all directions)
+- Located on shortest accessible route to entrance
+- Each space marked with International Symbol of Accessibility
+- Van spaces marked "Van Accessible"
+- Signs mounted minimum 60 inches above ground (to bottom of sign)
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Accessible parking signs (blue wheelchair symbol)
+- Striped access aisles between spaces
+- Proximity to building entrance
+- Van-accessible signage
+- Adequate width of spaces and aisles
+- Level surfaces (no visible slopes in parking areas)
+- Curb ramps connecting parking to accessible route
+
+1.4 CURB RAMPS (2010 Standards §406)
+-------------------------------------
+- Required wherever accessible route crosses a curb
+- Maximum slope: 1:12
+- Minimum width: 36 inches (excluding flares)
+- Flare slopes: maximum 1:10 (where pedestrians cross)
+- Surface: detectable warning (truncated domes), 24 inches deep
+- Detectable warning color: contrasting with adjacent surface
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Curb ramps at all pedestrian crossings
+- Yellow/red truncated dome detectable warnings
+- Proper width and slope appearance
+- Flared sides where pedestrians walk alongside
+
+1.5 ENTRANCE (2010 Standards §404)
+-----------------------------------
+- At least 60% of all public entrances must be accessible
+- Door clear opening width: minimum 32 inches (with door open 90°)
+- Maneuvering clearance on pull side: 18 inches minimum beside latch
+- Maneuvering clearance on push side: 12 inches minimum beside latch
+- Threshold maximum height: 1/4 inch (vertical) or 3/4 inch (beveled)
+- Door opening force: 5 lbf maximum for interior doors
+  (Fire doors may require more per code; exterior doors not specified
+   in federal ADA but see state-specific requirements below)
+- Door closing speed: minimum 5 seconds from 90° to 12° (if closer used)
+- Hardware: operable with one hand, without tight grasping or twisting
+  (lever handles, push bars, or similar — NOT round knobs)
+- Hardware height: 34-48 inches above floor
+
+Automatic doors: Must comply with ANSI/BHMA A156.10
+- Maneuvering clearance not required at automatic doors
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Door width appears to accommodate wheelchair (32+ inches clear)
+- Door handle type (lever = good, round knob = potential issue)
+- Clear space beside door on pull side
+- Threshold height at door
+- Steps at entrance without ramp alternative
+- "Accessible Entrance" signage
+- Power door openers (push buttons with wheelchair symbol)
+
+================================================================================
+SECTION 2: PRIORITY 2 — ACCESS TO GOODS & SERVICES
+================================================================================
+
+2.1 INTERIOR ACCESSIBLE ROUTE (§402, §403)
+-------------------------------------------
+- Minimum clear width: 36 inches continuously
+- Clear width at doorways: 32 inches minimum
+- Passing space: 60 inches at reasonable intervals
+- Turning space: 60-inch diameter circle OR T-shaped turning space
+  (T-shape: 60 inches square with two 36-inch-wide arms)
+- Floor surfaces: stable, firm, slip-resistant
+- Carpet: maximum 1/2-inch pile height, securely attached, firm cushion
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Narrow corridors or aisles
+- Furniture or displays blocking paths
+- Tight turns without adequate space
+- Thick or loose carpet/rugs
+- Obstacles in corridors (trash cans, furniture, equipment)
+
+2.2 INTERIOR DOORS (§404)
+--------------------------
+- Clear opening: 32 inches minimum
+- Maneuvering clearance: same as entrance doors
+- Force: 5 lbf maximum for interior hinged doors
+- Hardware: lever or push/pull (not round knobs)
+- Threshold: 1/4 inch max vertical, 3/4 inch max beveled
+- Vision panels (if provided): lowest part no higher than 43 inches
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Door handle types throughout interior
+- Narrow doorways
+- Doors that open into corridors reducing clear width
+- Heavy fire doors without power assist
+
+2.3 SIGNAGE (§703)
+-------------------
+Permanent Room Signs (room numbers, restrooms, exits):
+- Mounted on wall adjacent to latch side of door
+- Centerline 60 inches above floor
+- Raised characters (1/32 inch minimum raised)
+- Character height: 5/8 inch to 2 inches
+- Grade II Braille below text
+- High contrast (light on dark or dark on light)
+- Non-glare finish
+
+Directional/Informational Signs:
+- If mounted above 80 inches: minimum 3-inch character height
+- High contrast, non-glare finish
+
+International Symbol of Accessibility:
+- Required at accessible entrances, parking, restrooms
+- White symbol on blue background
+- Proportioned per ICC A117.1
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Room identification signs with raised text and braille
+- Sign mounting height and position relative to doors
+- Accessibility symbols at appropriate locations
+- Contrast and legibility of signs
+
+2.4 CONTROLS & OPERATING MECHANISMS (§309)
+--------------------------------------------
+- Clear floor space: 30 × 48 inches at each control
+- Forward reach: 15-48 inches above floor
+- Side reach: 15-54 inches above floor (48 inches if over obstruction)
+- Operable with one hand, without tight grasping or twisting
+- Maximum operating force: 5 lbf
+
+Includes: light switches, thermostats, electrical outlets, fire alarms,
+intercoms, elevator controls, vending machines, ATMs
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Light switch and thermostat heights
+- Fire alarm pull stations
+- Elevator button heights
+- Vending machine controls
+- Self-service kiosk heights
+
+2.5 SEATING, TABLES & COUNTERS (§902, §904)
+---------------------------------------------
+Tables and work surfaces:
+- Top: 28-34 inches above floor
+- Knee clearance: 27 inches high, 30 inches wide, 19 inches deep minimum
+- Wheelchair space: 30 × 48 inches clear floor space
+
+Sales/service counters:
+- Maximum height: 36 inches above floor for at least one section
+- Section length: 36 inches minimum
+
+Food service counters:
+- Maximum 34 inches above floor, OR
+- Provide tray shelf no higher than 34 inches
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Counter heights at reception, service areas
+- Table heights and knee clearance
+- Checkout counter accessibility
+- Wheelchair approach space at counters
+
+2.6 ELEVATORS (§407)
+---------------------
+- Hall call buttons: centerline 42 inches maximum above floor
+- Hall lanterns: visible from call button area
+- Audible signals: one tone up, two tones down
+- Door reopening device: must detect person/wheelchair
+- Interior dimensions (minimum):
+  - 80 inches deep, 54 inches wide, OR
+  - 54 inches deep, 80 inches wide
+  - Door opening: 36 inches minimum (center-opening: 42 inches for
+    80-inch-deep car)
+- Floor indicators: visible and audible
+- Controls: 15-48 inches above floor
+- Raised characters and braille at controls and jambs
+- Emergency communication: usable without voice
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Elevator door width
+- Button panel height and marking
+- Floor indicators
+- Interior cab dimensions
+- Braille on buttons and jambs
+
+2.7 STAIRS (§504)
+------------------
+(Even where elevator/ramp exists, stairs must meet certain requirements)
+- Treads: slip-resistant surface
+- Nosings: must not protrude more than 1-1/2 inches
+- Open risers: not permitted
+- Handrails: both sides, 34-38 inches high
+- Handrail extensions: 12 inches at top, one tread depth + 12 inches at bottom
+- Handrails: continuous, graspable (1-1/4 to 2-inch diameter round)
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Handrails on both sides of stairs
+- Handrail continuity and height
+- Open risers (gaps between steps)
+- Slip-resistant tread surfaces
+- Handrail extensions at top and bottom
+
+================================================================================
+SECTION 3: PRIORITY 3 — TOILET ROOMS / RESTROOMS
+================================================================================
+
+3.1 GENERAL RESTROOM REQUIREMENTS (§603)
+-----------------------------------------
+- At least one of each type of fixture must be accessible
+- Turning space: 60-inch diameter circle (may overlap fixture clearances)
+- Door: must not swing into required clearances at fixtures
+  (Exception: door may swing into turning space if 30×48 clear beyond swing)
+- Full-length mirror (if provided): bottom edge maximum 40 inches above floor
+- Coat hooks and shelves: 15-48 inches above floor
+
+3.2 TOILET STALLS / COMPARTMENTS (§604)
+-----------------------------------------
+Wheelchair-accessible stall:
+- Minimum: 60 inches wide × 56 inches deep (wall-mounted toilet)
+  OR 60 inches wide × 59 inches deep (floor-mounted toilet)
+- Door: self-closing, opens outward OR slides
+- Clear space: minimum 60 inches from side wall, 56 inches from rear wall
+- Toe clearance: minimum 9 inches above floor under partitions
+
+Ambulatory-accessible stall (required if 6+ total stalls):
+- 35-37 inches wide
+- Grab bars on both sides
+
+Grab bars:
+- Side wall: 42 inches minimum length, 12 inches from rear wall
+- Rear wall: 36 inches minimum length
+- Height: 33-36 inches above floor
+- Diameter: 1-1/4 to 2 inches
+- Clearance from wall: 1-1/2 inches
+
+Toilet:
+- Seat height: 17-19 inches above floor
+- Centerline: 16-18 inches from side wall
+
+Flush controls:
+- On open side of toilet
+- Maximum 48 inches above floor, or automatic
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Wheelchair-accessible stall presence and apparent size
+- Grab bars behind and beside toilet
+- Door swing direction on accessible stall
+- Toilet paper dispenser location (should not obstruct grab bar use)
+- Flush control location (open side)
+
+3.3 LAVATORIES & SINKS (§606)
+-------------------------------
+- Rim height: maximum 34 inches above floor
+- Clear floor space: 30 × 48 inches (forward approach)
+- Knee clearance: 27 inches high, 30 inches wide, 11 inches deep minimum
+- Toe clearance: 9 inches high, 17 inches deep minimum
+- Hot water and drain pipes: insulated or configured to protect against contact
+- Faucets: operable with one hand, without tight grasping
+  (lever, push, touch, or automatic — NOT round knobs)
+- Self-closing faucets: minimum 10-second flow
+
+Mirrors:
+- Bottom of reflecting surface: maximum 40 inches above floor
+  (above lavatory; elsewhere maximum 35 inches for full-length)
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Sink/lavatory height
+- Open space under sinks (no cabinets blocking knee space)
+- Pipe insulation under sinks
+- Faucet type (lever vs. knob)
+- Mirror height
+- Soap dispenser and towel dispenser heights and reach
+
+================================================================================
+SECTION 4: PRIORITY 4 — ADDITIONAL ACCESS
+================================================================================
+
+4.1 DRINKING FOUNTAINS (§602)
+------------------------------
+- If provided, must have two levels or a "hi-lo" unit:
+  - Low fountain: spout max 36 inches above floor, knee clearance
+  - High fountain: 38-43 inches above floor (for standing persons)
+- Clear floor space: 30 × 48 inches (forward approach at low unit)
+- Spout: near front, maximum 5 inches from front edge
+- Water flow height: minimum 4 inches
+- Controls: front-mounted or side-mounted, operable with one hand
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Two-height drinking fountains
+- Knee clearance at low fountain
+- Location relative to circulation path
+- Protruding objects (wall-mounted fountains between 27-80 inches)
+
+4.2 FIRE ALARM SYSTEMS (§702)
+-------------------------------
+- If fire alarms are provided, they must include BOTH:
+  - Audible alarms
+  - Visual alarms (strobes)
+- Visual alarm requirements:
+  - Clear or white lens
+  - Minimum 75 candela (open areas)
+  - Flash rate: 1-3 Hz
+  - Must be within 50 feet of any point in common areas
+  - Below 80 inches from floor (typically ceiling-mounted)
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Fire alarm pull stations (height should be 42-48 inches)
+- Visual strobe alarms visible in photos
+- Audible alarm horns/speakers
+- Both visual AND audible components present
+
+4.3 ASSEMBLY AREAS (§221, §802)
+---------------------------------
+Wheelchair spaces (if assembly seating is provided):
+  Seating Capacity    Required Wheelchair Spaces
+  4-25                1
+  26-50               2
+  51-150              4
+  151-300             5
+  301-500             6
+
+- Wheelchair space: 36 inches wide × 48 inches deep (forward) or
+  60 inches deep (side approach)
+- Companion seat adjacent to each wheelchair space
+- Wheelchair spaces dispersed throughout seating area
+- Lines of sight: comparable to general seating
+- Assistive listening systems required (if audio amplification provided)
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Wheelchair seating locations in assembly areas
+- Integration with general seating
+- Lines of sight from wheelchair locations
+- Assistive listening signage
+
+================================================================================
+SECTION 5: EMERGENCY EGRESS
+================================================================================
+
+5.1 ACCESSIBLE MEANS OF EGRESS (§1003 IBC)
+--------------------------------------------
+- Each accessible space must have at least one accessible means of egress
+- More than one required when more than one exit required by code
+- Must include: accessible route to exit, exit stairway or ramp
+- Areas of refuge (where required):
+  - Minimum 30 × 48 inches wheelchair space
+  - Two-way communication with fire command
+  - Illuminated sign: "AREA OF RESCUE ASSISTANCE"
+  - Instructions for use posted
+
+WHAT TO LOOK FOR IN PHOTOS:
+- Illuminated exit signs
+- Clear exit paths
+- Areas of refuge signage
+- Emergency communication devices near exits
+- Width of exit corridors (44 inches minimum for most occupancies)
+
+================================================================================
+SECTION 6: WASHINGTON STATE — ADDITIONAL REQUIREMENTS
+================================================================================
+
+Washington adopts the International Building Code (IBC) with state
+amendments. In many areas, Washington requirements exceed federal ADA.
+Code: WAC 51-50 (Washington State Building Code)
+Reference: ICC/ANSI A117.1 standard
+
+KEY WASHINGTON-SPECIFIC REQUIREMENTS:
+
+6.1 Exterior Accessible Routes
+- Minimum clear width for EXTERIOR routes: 44 inches (vs. 36 inches ADA)
+  [WA Building Code 2021, Chapter 11]
+
+6.2 Door Opening Force
+- Exterior doors: maximum 10 pounds force (Washington-specific)
+  (Federal ADA does not specify exterior door force)
+- Interior doors: 5 lbf (same as federal)
+
+6.3 Parking Signs
+- Van-accessible signs may include penalty amount per RCW 46.19.050
+- International Symbol of Accessibility: white on blue background
+- Required on vertical sign at each accessible space
+
+6.4 Public Entrances
+- At least 60% of all public entrances must be accessible
+  (Same as 2010 ADA Standards)
+
+6.5 Dwelling Units (Multi-Family)
+- Structures with 4+ dwelling/sleeping units: every unit must be Type B
+  (Exception: allowed reduction per Section 1108.7)
+- Washington applies the Fair Housing Accessibility Guidelines AND state
+  building code — the more stringent requirement applies
+
+6.6 Barrier-Free Code (Chapter 70.92 RCW)
+- "Provisions in buildings for aged and handicapped persons"
+- Applies to buildings constructed or altered using state/public funds
+- Washington Human Rights Commission enforces disability access requirements
+
+WHAT TO LOOK FOR IN WASHINGTON SPACES:
+- Exterior paths narrower than 44 inches (violation of WA code)
+- Heavy exterior doors (>10 lbs force is WA-specific violation)
+- All items from federal checklist still apply
+- Multi-family housing accessibility of all units
+
+================================================================================
+SECTION 7: MICHIGAN — ADDITIONAL REQUIREMENTS
+================================================================================
+
+Michigan adopts the International Building Code with state amendments.
+Michigan has its own "Barrier Free Design" requirements that supplement
+federal ADA.
+Code: Michigan Building Code (based on 2015 IBC with amendments)
+Reference: Michigan Accessibility Code 2009 (based on ICC/ANSI A117.1-2009)
+Authority: Michigan Barrier Free Design Board (LARA)
+
+KEY MICHIGAN-SPECIFIC REQUIREMENTS:
+
+7.1 Public Entrances
+- At least 60% of all public entrances must be accessible
+  [Michigan Building Code 2015, Chapter 11]
+
+7.2 Barrier Free Design Act (Act 1 of 1966, MCL 125.1352)
+- All public facilities or facilities used by the public (contract for
+  construction after July 2, 1974) must meet barrier free design requirements
+- If alteration involves <50% of floor area: only affected area + route
+  to nearest entrance must comply
+- If alteration involves ≥50% of floor area: ENTIRE facility must comply
+  (This 50% threshold is Michigan-specific and stricter than federal)
+
+7.3 Platform Lifts
+- Must be installed per Michigan elevator code
+- Permitted on accessible routes in specific situations including:
+  - Routes to wheelchair spaces with dispersion requirements
+  - Performing areas in places of assembly
+  - Jury boxes and witness stands
+  - Courtroom stations (judges, clerks, bailiffs, court reporters)
+  - Load/unload areas for amusement rides
+
+7.4 Gaming Facilities
+- 2% of each type of gaming table must be accessible (front approach)
+- 2% of gaming machines must be accessible (front approach)
+- Accessible machines must be distributed throughout types provided
+
+7.5 Recreational Facilities
+- Every recreational facility type serving Accessible units must be
+  accessible (in Group R-2 and R-4 occupancies)
+
+7.6 Michigan Persons with Disabilities Civil Rights Act
+- State-level civil rights protections supplementing federal ADA
+- Enforced by Michigan Department of Civil Rights
+- Individuals can file complaints for accessibility violations
+- Private lawsuits permitted for violations
+
+7.7 Financial Incentives (Michigan-specific)
+- Disabled Access Credit (tax credit for small businesses)
+- Barrier Free Design Property Tax Exemption
+- Federal Work Opportunity Tax Credit for hiring individuals with disabilities
+
+WHAT TO LOOK FOR IN MICHIGAN SPACES:
+- All items from federal checklist apply
+- Pay special attention to the 50% alteration threshold
+- Gaming areas: accessible table and machine distribution
+- Recreational facilities: full accessibility required if serving accessible units
+- Courtroom/government spaces: specific lift and access requirements
+
+================================================================================
+SECTION 8: COMMON VISUAL COMPLIANCE ISSUES
+================================================================================
+
+This section highlights the most frequently observed ADA violations that
+can be identified through visual inspection of photographs:
+
+HIGH-FREQUENCY VIOLATIONS:
+1. Missing or incorrect signage (no braille, wrong height, wrong location)
+2. Round door knobs instead of lever handles
+3. Inaccessible restrooms (no grab bars, insufficient space, high fixtures)
+4. Missing detectable warnings at curb ramps
+5. Protruding objects in circulation paths
+6. Insufficient door maneuvering clearances
+7. Ramps too steep or missing handrails
+8. Inaccessible parking (wrong count, missing signs, no access aisles)
+9. Counters too high without accessible section
+10. Missing visual fire alarms (strobes)
+
+ITEMS THAT CANNOT BE DETERMINED FROM PHOTOS ALONE:
+- Exact slopes (need measurements)
+- Door opening force (need gauge)
+- Exact dimensions (need tape measure)
+- Elevator audible signals
+- Surface slip-resistance ratings
+- Braille accuracy on signs (too small to read in most photos)
+
+When analyzing photos, flag potential issues and note that on-site
+measurement is needed to confirm specific dimensional violations.
+
+================================================================================
+SECTION 9: QUICK REFERENCE — KEY MEASUREMENTS
+================================================================================
+
+ROUTE/PATH WIDTHS:
+  Accessible route minimum:         36 inches (federal) / 44 inches exterior (WA)
+  Doorway clear width:              32 inches minimum
+  Passing space:                    60 inches
+  Ramp width between handrails:     36 inches minimum
+
+HEIGHTS:
+  Door handle:                      34-48 inches
+  Light switches/controls:          15-48 inches (forward reach)
+  Grab bars:                        33-36 inches
+  Handrails:                        34-38 inches
+  Toilet seat:                      17-19 inches
+  Lavatory rim:                     34 inches maximum
+  Mirror bottom edge:               40 inches maximum
+  Counter (service):                36 inches maximum
+  Table/work surface:               28-34 inches
+  Sign centerline:                  60 inches
+  Parking sign bottom:              60 inches minimum
+
+CLEARANCES:
+  Wheelchair turning:               60-inch diameter circle
+  Clear floor space:                30 × 48 inches
+  Toilet stall (accessible):        60 × 56 inches minimum
+  Knee clearance height:            27 inches minimum
+  Toe clearance height:             9 inches minimum
+
+SLOPES:
+  Maximum ramp slope:               1:12 (8.33%)
+  Maximum cross slope:              1:48 (2.08%)
+  Maximum running slope (non-ramp): 1:20 (5%)
+  Maximum curb ramp slope:          1:12
+  Maximum flare slope:              1:10
+
+PARKING:
+  Standard accessible width:        96 inches (8 feet)
+  Access aisle width:               60 inches (5 feet)
+  Van space width:                  132 inches (11 feet), or 96 + 96 aisle
+  Van vertical clearance:           98 inches
+
+DOOR FORCE:
+  Interior doors:                   5 lbf maximum (federal)
+  Exterior doors:                   10 lbf maximum (Washington state)
+  Fire doors:                       Per authority having jurisdiction
+
+================================================================================
+ATTRIBUTION & DISCLAIMER
+================================================================================
+
+This reference document compiles information from:
+- 2010 ADA Standards for Accessible Design (U.S. Department of Justice)
+- ADA Checklist for Existing Facilities (New England ADA Center, a project
+  of the Institute for Human Centered Design, ADA National Network)
+- U.S. Access Board Guide to the ADA Accessibility Standards
+- Washington State Building Code (WAC 51-50), Chapter 11
+- Michigan Building Code (based on 2015 IBC with amendments)
+- Michigan Barrier Free Design Act (Act 1 of 1966, MCL 125.1352)
+
+This document is for informational and analytical reference only. It is NOT
+a substitute for the full ADA Standards, state building codes, or legal
+advice. Accessibility determinations should be verified by qualified
+professionals. Some requirements may have been updated after this
+document was compiled.
+
+ADA Information Line: (800) 514-0301 (voice) / (800) 514-0383 (TTY)
+U.S. Access Board: (800) 872-2253
+Washington ADA Center (NW ADA Center): nwadacenter.org
+Michigan ADA Center: adamich.org
+================================================================================

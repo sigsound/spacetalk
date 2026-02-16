@@ -1,0 +1,48 @@
+Room,Description,Value
+Entire Roomplan,Name,Exterior Floor plan
+Entire Roomplan,Address,513 W Fourth Plain Blvd Vancouver WA
+Entire Roomplan,Latitude,45.639942 m
+Entire Roomplan,Longitude,-122.676512 m
+Entire Roomplan,Altitude [ft],130' 10.7"
+Entire Roomplan,Total exterior floor area [ft^2],1918.1
+Entire Roomplan,Total livable floor area [ft^2],1840.5
+Backyard,Floor area [ft^2],1393.1
+Side yard,Floor area [ft^2],431.3
+Backyard,Dimensions (bounding box) [ft],48' 8.0" x 30' 4.8"
+Backyard,Dimensions (inscribed) [ft],43' 6.1" x 24' 9.0"
+Side yard,Dimensions [ft],36' 10.0" x 11' 8.5"
+Entire Roomplan,Wall area [ft^2],2296.0
+Backyard,Wall area [ft^2],1609.5
+Side yard,Wall area [ft^2],686.5
+Entire Roomplan,Volume [ft^3],14636.81
+Backyard,Volume [ft^3] (approx),9662.82 
+Side yard,Volume [ft^3] (approx),4973.99 
+Backyard,Ceiling height [ft] (approx),6' 11.2" 
+Side yard,Ceiling height [ft] (approx),11' 6.4" 
+Entire Roomplan,Total perimeter in rooms [ft],266' 3.6"
+Backyard,Perimeter [ft],169' 2.6"
+Side yard,Perimeter [ft],97' 1.0"
+Backyard,Doors total casing length [ft],25' 4.8"
+Side yard,Windows total casing length [ft],62' 3.2"
+Backyard,Windows total casing length [ft],59' 7.0"
+Entire Roomplan,Total window area [ft^2],119.7
+Side yard,Window dimensions [ft],9' 2.0" x 5' 3.5"
+Backyard,Window dimensions [ft],6' 0.9" x 2' 7.7"
+Side yard,Window dimensions [ft],2' 10.2" x 4' 9.7"
+Side yard,Window dimensions [ft],2' 8.6" x 4' 8.8"
+Backyard,Window dimensions [ft],2' 4.8" x 4' 11.2"
+Backyard,Window dimensions [ft],2' 8.2" x 3' 11.2"
+Backyard,Window dimensions [ft],2' 9.1" x 2' 3.2"
+Backyard,Door dimensions [ft],3' 1.0" x 10' 10.8"
+Entire Roomplan,# Chairs,2
+Entire Roomplan,# Stairs,1
+Backyard,Chair dimensions (w x h x d) [ft],1' 10.0" x 3' 1.3" x 2' 1.3"
+Side yard,Chair dimensions (w x h x d) [ft],1' 11.3" x 2' 5.3" x 2' 1.1"
+Backyard,Stairs dimensions (w x h x d) [ft],5' 8.8" x 2' 1.1" x 7' 11.0"
+Key,Dimensions (bounding box),Smallest rectangle that contains the room
+Key,Dimensions (inscribed),Largest rectangle that fits inside the room
+Key,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions
+Settings,Wall thickness [ft],0' 3.9"
+Settings,Doors casing width [ft],0' 1.6"
+Settings,Windows casing width [ft],0' 1.6"
+Settings,Each room area method,Internal wall area excluded

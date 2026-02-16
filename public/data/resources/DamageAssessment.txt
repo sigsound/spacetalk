@@ -1,0 +1,103 @@
+# Property Damage Assessment & Fire Investigation Reference Guide
+
+## Overview
+This document provides a framework for insurance adjusters and investigators analyzing 3D-captured damaged properties. Focus on documenting damage patterns, potential origin points, and structural concerns.
+
+## Fire Damage Assessment
+
+### 1. Fire Origin Indicators
+- **V-patterns**: Fire burns upward and outward creating V-shaped char patterns; the point of the V often indicates origin area
+- **Pour patterns**: Irregular burn patterns on floors may indicate accelerant use
+- **Low burn patterns**: Burns near floor level without explanation may indicate intentional ignition
+- **Multiple origin points**: More than one distinct origin area suggests arson
+- **Char depth**: Deeper charring indicates longer burn time or more intense heat
+
+### 2. Heat and Smoke Patterns
+- **Smoke staining**: Heavier at top of walls, can indicate fire movement direction
+- **Heat shadowing**: Protected areas behind objects show less damage
+- **Glass crazing**: Network of cracks in glass indicates rapid heating
+- **Melted materials**: Note melting points (plastics ~200-400°F, aluminum ~1200°F, copper ~1900°F)
+- **Color indicators**: 
+  - Black soot: incomplete combustion
+  - White/gray ash: complete combustion
+  - Yellow/brown staining: slow smoldering fire
+
+### 3. Electrical Fire Indicators
+- **Arc mapping**: Document location of electrical arcs on wiring
+- **Beading on wires**: Copper melting indicates electrical activity during fire
+- **Outlet/switch damage**: Check for signs of electrical failure at origin
+- **Appliance location**: Document appliances near suspected origin
+
+### 4. Structural Damage Categories
+- **Total loss**: Structure unsafe, complete demolition required
+- **Major structural**: Load-bearing elements compromised
+- **Moderate**: Significant damage but structure sound
+- **Minor/cosmetic**: Smoke/water damage, surfaces affected
+
+## Water Damage Assessment
+
+### 1. Water Damage Classes
+- **Class 1**: Minimal absorption, affects only part of room
+- **Class 2**: Significant absorption, affects carpets and walls up to 24"
+- **Class 3**: Greatest absorption, ceiling, walls, insulation saturated
+- **Class 4**: Specialty drying, hardwood, concrete, plaster affected
+
+### 2. Water Damage Categories
+- **Category 1 (Clean)**: From sanitary source (broken supply line)
+- **Category 2 (Gray)**: Contains contaminants (dishwasher, washing machine)
+- **Category 3 (Black)**: Highly contaminated (sewage, flooding)
+
+### 3. Mold Indicators
+- **Visible growth**: Document location, extent, color
+- **Musty odor**: Note areas with distinct smell
+- **Timeline**: Mold can begin within 24-48 hours of water exposure
+- **Hidden areas**: Check behind walls, under flooring, in HVAC systems
+
+## Documentation Checklist
+
+### General
+- [ ] Full property address and date of loss
+- [ ] Overall exterior shots showing all sides
+- [ ] Aerial/bird's eye view if available
+- [ ] Property boundaries and adjacent structures
+
+### Fire Specific
+- [ ] Suspected area of origin (multiple angles)
+- [ ] V-patterns and char patterns
+- [ ] Electrical panel condition
+- [ ] Appliance locations and conditions
+- [ ] Smoke detector locations and functionality
+- [ ] Fire suppression system (if present)
+
+### Water Specific
+- [ ] Source of water intrusion
+- [ ] Water lines/staining on walls
+- [ ] Affected materials inventory
+- [ ] Standing water depth measurements
+- [ ] HVAC system condition
+
+### Structural
+- [ ] Foundation condition
+- [ ] Load-bearing wall integrity
+- [ ] Roof/ceiling damage
+- [ ] Floor stability
+- [ ] Stair and railing condition
+
+## Analysis Workflow
+1. Review location data and incident reports
+2. Identify damage type(s) present
+3. Document overall damage extent
+4. Analyze patterns for origin/cause
+5. Catalog affected materials and systems
+6. Note safety hazards requiring immediate attention
+7. Provide preliminary damage category assessment
+8. Recommend areas for detailed professional inspection
+
+## Red Flags for Investigation
+- Damage inconsistent with reported cause
+- Missing personal items (valuables removed before loss)
+- Recent insurance policy changes
+- Financial distress indicators
+- Multiple prior claims
+- Disabled safety systems
+- Evidence of forced entry or staging

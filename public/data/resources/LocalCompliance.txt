@@ -1,0 +1,72 @@
+# Local Building Code & Zoning Compliance Reference Guide
+
+## Overview
+This document provides a framework for evaluating 3D-captured spaces against local building codes, structural requirements, and zoning regulations. Always cross-reference with current jurisdiction-specific requirements.
+
+## Key Compliance Categories
+
+### 1. Structural Requirements
+- **Load-bearing walls**: Identify potential load-bearing walls (typically perpendicular to floor joists)
+- **Ceiling heights**: Minimum 7'0" for habitable rooms (varies by jurisdiction)
+- **Floor area**: Minimum room sizes vary by use (bedrooms typically min 70 sq ft)
+- **Egress requirements**: Windows in bedrooms must meet egress standards (min 5.7 sq ft opening)
+
+### 2. Electrical Code (NEC Reference)
+- **Outlet spacing**: Receptacles every 12 feet along walls in living spaces
+- **GFCI requirements**: Required in kitchens, bathrooms, garages, outdoors, basements
+- **AFCI requirements**: Required in bedrooms, living rooms, hallways
+- **Panel access**: 36" clearance required in front of electrical panels
+
+### 3. Plumbing Code (IPC Reference)
+- **Fixture clearances**: Toilets require 15" from center to side wall, 21" front clearance
+- **Ventilation**: Bathrooms require mechanical ventilation or operable window
+- **Water heater**: Must be accessible, proper drainage pan if in living space
+
+### 4. Fire Safety
+- **Smoke detectors**: Required in each bedroom, outside sleeping areas, every level
+- **CO detectors**: Required near sleeping areas if gas appliances present
+- **Fire extinguisher**: Recommended in kitchen, garage
+- **Exit routes**: Two means of egress from each floor
+
+### 5. Zoning Considerations
+- **Permitted use**: Residential, commercial, mixed-use designation
+- **Setbacks**: Distance requirements from property lines
+- **Height restrictions**: Maximum building height for zone
+- **Parking requirements**: Varies by use and jurisdiction
+- **ADU regulations**: Accessory dwelling unit requirements if applicable
+
+### 6. Energy Code (IECC Reference)
+- **Insulation**: R-values vary by climate zone
+- **Window efficiency**: U-factor and SHGC requirements
+- **HVAC efficiency**: Minimum SEER ratings
+- **Air sealing**: Blower door test requirements
+
+## Common Violations to Check
+1. Unpermitted additions or conversions
+2. Bedroom without proper egress window
+3. Bathroom without ventilation
+4. Missing smoke/CO detectors
+5. Improper electrical work (exposed wiring, overloaded circuits)
+6. Water heater code violations
+7. Stair riser/tread inconsistencies
+8. Handrail height violations (34-38" required)
+9. Guard rail height violations (36" min interior, 42" exterior)
+10. Improper garage-to-house door (fire-rated required)
+
+## Permit Requirements (General)
+Work typically requiring permits:
+- Structural changes (walls, foundations, roofing)
+- Electrical work beyond simple replacements
+- Plumbing work beyond fixture replacements
+- HVAC installation or replacement
+- Window/door additions or enlargements
+- Deck/porch construction
+- Garage conversions
+- ADU construction
+
+## Analysis Workflow
+1. Identify jurisdiction from location data
+2. Search for current local building codes
+3. Evaluate space against general requirements
+4. Note potential violations for further inspection
+5. Recommend professional verification for any concerns
