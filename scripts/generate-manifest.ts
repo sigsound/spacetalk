@@ -8,11 +8,35 @@
 import fs from "fs";
 import path from "path";
 
+// Camera JSON structure (transform matrix)
+interface CameraData {
+  t_03: number;  // X position
+  t_13: number;  // Y position (height)
+  t_23: number;  // Z position
+  timestamp: number;
+}
+
+// Room structure from optimized_roomplan.json
+interface RoomData {
+  id: string;
+  category: string;
+  label_automated: string;
+  vertices_x: number[];
+  vertices_z: number[];
+  center_xz: number[];
+  story: number;
+}
+
+interface RoomPlan {
+  rooms: RoomData[];
+}
+
 interface SpaceManifestEntry {
   id: string;
   name: string;
   thumbnailPath: string | null;
   images: string[];
+  imagesByRoom: { [roomLabel: string]: string[] } | null;
   floorplanData: string | null;
   locationData: object | null;
 }
@@ -24,6 +48,96 @@ interface Manifest {
 
 const spacesDir = path.join(process.cwd(), "public/data/spaces");
 const outputPath = path.join(process.cwd(), "public/data/spaces-manifest.json");
+
+/**
+ * Point-in-polygon test using ray casting algorithm.
+ * Returns true if point (x, z) is inside the polygon defined by vertices.
+ */
+function pointInPolygon(x: number, z: number, verticesX: number[], verticesZ: number[]): boolean {
+  let inside = false;
+  const n = verticesX.length;
+  
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = verticesX[i], zi = verticesZ[i];
+    const xj = verticesX[j], zj = verticesZ[j];
+    
+    if (((zi > z) !== (zj > z)) && (x < (xj - xi) * (z - zi) / (zj - zi) + xi)) {
+      inside = !inside;
+    }
+  }
+  
+  return inside;
+}
+
+/**
+ * Find which room a camera position belongs to.
+ * Returns the room label or "Unknown" if not found in any room.
+ */
+function findRoomForPosition(x: number, z: number, rooms: RoomData[]): string {
+  for (const room of rooms) {
+    if (pointInPolygon(x, z, room.vertices_x, room.vertices_z)) {
+      return room.label_automated || room.category || room.id;
+    }
+  }
+  return "Unknown";
+}
+
+/**
+ * Assign each image to a room based on camera position.
+ * Returns a mapping of room label to list of image filenames.
+ */
+function assignImagesToRooms(
+  spaceDir: string,
+  images: string[]
+): { [roomLabel: string]: string[] } | null {
+  const camerasDir = path.join(spaceDir, "cameras");
+  const roomplanPath = path.join(spaceDir, "optimized_roomplan.json");
+  
+  // Check if both cameras and roomplan exist
+  if (!fs.existsSync(camerasDir) || !fs.existsSync(roomplanPath)) {
+    return null;
+  }
+  
+  // Load roomplan
+  let roomplan: RoomPlan;
+  try {
+    roomplan = JSON.parse(fs.readFileSync(roomplanPath, "utf-8"));
+    if (!roomplan.rooms || roomplan.rooms.length === 0) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+  
+  const imagesByRoom: { [roomLabel: string]: string[] } = {};
+  
+  for (const imageName of images) {
+    // Camera JSON has same timestamp as image (without extension)
+    const timestamp = imageName.replace(/\.(jpg|jpeg)$/i, "");
+    const cameraPath = path.join(camerasDir, `${timestamp}.json`);
+    
+    if (!fs.existsSync(cameraPath)) {
+      // If no camera data, put in Unknown
+      if (!imagesByRoom["Unknown"]) imagesByRoom["Unknown"] = [];
+      imagesByRoom["Unknown"].push(imageName);
+      continue;
+    }
+    
+    try {
+      const camera: CameraData = JSON.parse(fs.readFileSync(cameraPath, "utf-8"));
+      const roomLabel = findRoomForPosition(camera.t_03, camera.t_23, roomplan.rooms);
+      
+      if (!imagesByRoom[roomLabel]) imagesByRoom[roomLabel] = [];
+      imagesByRoom[roomLabel].push(imageName);
+    } catch {
+      // If camera data is invalid, put in Unknown
+      if (!imagesByRoom["Unknown"]) imagesByRoom["Unknown"] = [];
+      imagesByRoom["Unknown"].push(imageName);
+    }
+  }
+  
+  return imagesByRoom;
+}
 
 export function generateManifest(spacesDirectory: string = spacesDir): Manifest {
   if (!fs.existsSync(spacesDirectory)) {
@@ -83,6 +197,9 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
       }
     }
 
+    // Assign images to rooms based on camera positions
+    const imagesByRoom = assignImagesToRooms(spaceDir, images);
+
     return {
       id: entry.name,
       name,
@@ -92,6 +209,7 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
           ? `/data/spaces/${entry.name}/images/${images[0]}`
           : null,
       images,
+      imagesByRoom,
       floorplanData,
       locationData,
     };
@@ -109,6 +227,16 @@ if (require.main === module) {
   fs.writeFileSync(outputPath, JSON.stringify(manifest, null, 2));
   console.log(`Generated manifest with ${manifest.spaces.length} spaces at ${outputPath}`);
   console.log(`Total images indexed: ${manifest.spaces.reduce((sum, s) => sum + s.images.length, 0)}`);
+  
+  // Log room assignment statistics
+  for (const space of manifest.spaces) {
+    if (space.imagesByRoom) {
+      console.log(`\n${space.id} room assignments:`);
+      for (const [room, imgs] of Object.entries(space.imagesByRoom)) {
+        console.log(`  ${room}: ${imgs.length} images`);
+      }
+    }
+  }
 }
 
 export type { SpaceManifestEntry, Manifest };

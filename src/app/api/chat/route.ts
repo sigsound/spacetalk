@@ -1,9 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
-import { sampleImages } from "@/lib/sampling";
+import { sampleImages, sampleImagesByRoom, type ImagesByRoom } from "@/lib/sampling";
 import manifest from "@/../public/data/spaces-manifest.json";
 
-import { AnalysisType } from "@/lib/types";
+import { AnalysisType, SampledImage, SampledImagesData } from "@/lib/types";
 
 const anthropic = new Anthropic();
 
@@ -222,6 +222,13 @@ export async function POST(req: NextRequest) {
     // Build content array with images and metadata for selected spaces
     const contentBlocks: Anthropic.Messages.ContentBlockParam[] = [];
     let totalSampledImages = 0;
+    let globalImageIndex = 0;  // Track image index across all spaces
+    
+    // Track sampled images for the frontend gallery
+    const sampledImagesData: SampledImagesData = {
+      spaces: [],
+      totalSampled: 0
+    };
 
     // Get base URL for fetching files from CDN
     // Use the request's host header (actual domain user is accessing), fallback to VERCEL_URL
@@ -309,51 +316,129 @@ export async function POST(req: NextRequest) {
         }
 
         // Sample and fetch representative images via HTTP
+        // Use room-based sampling if available, otherwise fall back to uniform sampling
         const allImages = spaceManifest.images;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const imagesByRoom = (spaceManifest as any).imagesByRoom as ImagesByRoom | null;
+        
         if (allImages.length > 0) {
-          const sampleIndices = sampleImages(allImages.length);
+          // Track which room each image belongs to for labeling
+          const imageToRoom: Map<string, string> = new Map();
+          let imagesToFetch: string[];
+          let samplingDescription: string;
+          
+          if (imagesByRoom && Object.keys(imagesByRoom).length > 0) {
+            // Room-based sampling for better spatial coverage
+            const result = sampleImagesByRoom(imagesByRoom);
+            imagesToFetch = result.images;
+            
+            // Build image-to-room mapping
+            for (const [room, imgs] of Object.entries(imagesByRoom)) {
+              for (const img of imgs) {
+                imageToRoom.set(img, room);
+              }
+            }
+            
+            // Build room breakdown for logging
+            const roomBreakdown = Object.entries(result.roomBreakdown)
+              .map(([room, count]) => `${room}: ${count}`)
+              .join(", ");
+            samplingDescription = `room-based sampling (${roomBreakdown})`;
+            
+            console.log(`[Chat API] Using room-based sampling for ${spacePath}:`, result.roomBreakdown);
+          } else {
+            // Fallback to uniform sampling
+            const sampleIndices = sampleImages(allImages.length);
+            imagesToFetch = sampleIndices.map(idx => allImages[idx]);
+            samplingDescription = "uniform sampling";
+            
+            console.log(`[Chat API] Using uniform sampling for ${spacePath} (no room data)`);
+          }
 
           contentBlocks.push({
             type: "text",
-            text: `\n[Sampled ${sampleIndices.length} of ${allImages.length} capture images]`
+            text: `\n[Sampled ${imagesToFetch.length} of ${allImages.length} capture images using ${samplingDescription}]\nWhen referencing images, use the Image ID (e.g., "Image 1", "Image 2") provided before each image.`
           });
 
-          console.log(`[Chat API] Fetching ${sampleIndices.length} images for ${spacePath}`);
+          console.log(`[Chat API] Fetching ${imagesToFetch.length} images for ${spacePath}`);
+          
+          // Prepare space data for sampled images tracking
+          const spaceImagesData: SampledImage[] = [];
+          const spaceImagesByRoom: { [roomLabel: string]: SampledImage[] } = {};
           
           // Fetch images in parallel for speed
-          const imagePromises = sampleIndices.map(async (idx) => {
-            const imgUrl = `${baseUrl}/data/spaces/${spacePath}/images/${allImages[idx]}`;
+          const imagePromises = imagesToFetch.map(async (imageName, idx) => {
+            const imgUrl = `${baseUrl}/data/spaces/${spacePath}/images/${imageName}`;
             try {
               const response = await fetch(imgUrl);
               if (response.ok) {
                 const buffer = await response.arrayBuffer();
-                return Buffer.from(buffer).toString("base64");
+                return {
+                  data: Buffer.from(buffer).toString("base64"),
+                  imageName,
+                  room: imageToRoom.get(imageName) || "Unknown",
+                  localIndex: idx
+                };
               } else {
                 console.warn(`[Chat API] Image fetch failed (${response.status}): ${imgUrl}`);
               }
             } catch (e) {
-              console.error(`[Chat API] Failed to fetch image ${allImages[idx]}:`, e);
+              console.error(`[Chat API] Failed to fetch image ${imageName}:`, e);
             }
             return null;
           });
 
-          const imageDataArray = await Promise.all(imagePromises);
-          const successCount = imageDataArray.filter(Boolean).length;
-          console.log(`[Chat API] Successfully fetched ${successCount}/${sampleIndices.length} images`);
+          const imageResults = await Promise.all(imagePromises);
+          const successCount = imageResults.filter(Boolean).length;
+          console.log(`[Chat API] Successfully fetched ${successCount}/${imagesToFetch.length} images`);
           
-          for (const imgData of imageDataArray) {
-            if (imgData) {
+          for (const result of imageResults) {
+            if (result) {
+              globalImageIndex++;
+              const imageId = `Image ${globalImageIndex}`;
+              const roomLabel = result.room;
+              
+              // Add label text before the image so Claude can reference it
+              contentBlocks.push({
+                type: "text",
+                text: `\n[${imageId} - ${spacePath}/${roomLabel} - ${result.imageName}]`
+              });
+              
               contentBlocks.push({
                 type: "image",
                 source: {
                   type: "base64",
                   media_type: "image/jpeg",
-                  data: imgData
+                  data: result.data
                 }
               });
+              
+              // Track for frontend gallery
+              const sampledImage: SampledImage = {
+                filename: result.imageName,
+                room: roomLabel,
+                url: `/data/spaces/${spacePath}/images/${result.imageName}`,
+                index: globalImageIndex
+              };
+              spaceImagesData.push(sampledImage);
+              
+              if (!spaceImagesByRoom[roomLabel]) {
+                spaceImagesByRoom[roomLabel] = [];
+              }
+              spaceImagesByRoom[roomLabel].push(sampledImage);
+              
               totalSampledImages++;
             }
           }
+          
+          // Add space data to sampled images tracking
+          sampledImagesData.spaces.push({
+            spaceId: spacePath,
+            spaceName: spaceManifest.name,
+            totalImages: allImages.length,
+            sampledImages: spaceImagesData,
+            byRoom: spaceImagesByRoom
+          });
         }
       } else if (isFollowUp) {
         // For follow-ups, note context from initial analysis
@@ -445,12 +530,16 @@ export async function POST(req: NextRequest) {
     const readable = new ReadableStream({
       async start(controller) {
         try {
-          // Send initial metadata
+          // Finalize sampled images count
+          sampledImagesData.totalSampled = totalSampledImages;
+          
+          // Send initial metadata including sampled images for gallery
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ 
             type: "meta", 
             spacesCount: selectedSpaces.length,
             sampledImages: totalSampledImages,
-            isFollowUp
+            isFollowUp,
+            sampledImagesData: isFollowUp ? null : sampledImagesData
           })}\n\n`));
 
           for await (const event of stream) {

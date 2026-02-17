@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType } from "@/lib/types";
+import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType, SampledImagesData } from "@/lib/types";
 import SpaceSidebar from "@/components/SpaceSidebar";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import PolycamLogo from "@/components/PolycamLogo";
+import SampledImagesGallery from "@/components/SampledImagesGallery";
 
 export default function Home() {
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -18,6 +19,7 @@ export default function Home() {
   const [spacesLoading, setSpacesLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [hasAnalyzed, setHasAnalyzed] = useState(false);
+  const [sampledImagesData, setSampledImagesData] = useState<SampledImagesData | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -75,6 +77,7 @@ export default function Home() {
     setMessages([]);
     setUploadedFiles([]);
     setHasAnalyzed(false);
+    setSampledImagesData(null);
   }, []);
 
   const handleAnalyze = async (type: AnalysisType) => {
@@ -200,6 +203,10 @@ Provide:
                   fullContent = "";
                 } else {
                   fullContent = `*Analyzing ${parsed.spacesCount} space${parsed.spacesCount > 1 ? 's' : ''} (${parsed.sampledImages} sampled images)...*\n\n`;
+                  // Store sampled images data for the gallery
+                  if (parsed.sampledImagesData) {
+                    setSampledImagesData(parsed.sampledImagesData);
+                  }
                 }
                 if (fullContent) {
                   setMessages((prev) =>
@@ -398,6 +405,11 @@ Provide:
             </div>
           ) : (
             <>
+              {/* Sampled Images Gallery - show after first assistant response starts */}
+              {sampledImagesData && messages.length >= 2 && (
+                <SampledImagesGallery data={sampledImagesData} />
+              )}
+              
               {messages.map((message, index) => (
                 <ChatMessage
                   key={message.id}
