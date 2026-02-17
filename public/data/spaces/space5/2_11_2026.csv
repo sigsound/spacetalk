@@ -1,0 +1,19 @@
+Room,Description,Value
+Entire Roomplan,Address,101–141 W 25th St Vancouver WA
+Entire Roomplan,Latitude,45.639389 m
+Entire Roomplan,Longitude,-122.671589 m
+Entire Roomplan,Altitude [ft],128' 3.2"
+Entire Roomplan,Total exterior floor area [ft^2],0.0
+Entire Roomplan,Total livable floor area [ft^2],0.0
+Entire Roomplan,Wall area [ft^2],0.0
+Entire Roomplan,Volume [ft^3],0.00
+Entire Roomplan,Total perimeter in rooms [ft],0'
+Entire Roomplan,Total window area [ft^2],0.0
+None,Door dimensions (w x h) [ft],8' 4.4" x 12' 7.8"
+Key,Dimensions (bounding box),Smallest rectangle that contains the room
+Key,Dimensions (inscribed),Largest rectangle that fits inside the room
+Key,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions
+Settings,Wall thickness [ft],0' 3.9"
+Settings,Doors casing width [ft],0' 1.6"
+Settings,Windows casing width [ft],0' 1.6"
+Settings,Each room area method,Internal wall area excluded

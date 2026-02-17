@@ -1,0 +1,26 @@
+{
+  "location" : {
+    "altitude" : 38.9608757533133,
+    "timestamp" : 1770858472.9997182,
+    "longitude" : -122.67158198396967,
+    "latitude" : 45.6393681573064,
+    "verticalAccuracy" : 5.78658025150103,
+    "horizontalAccuracy" : 4.748651530191783
+  },
+  "heading" : {
+    "trueHeading" : 200.27793884277344,
+    "headingAccuracy" : 17.833534240722656
+  },
+  "placemark" : {
+    "name" : "101–141 W 25th St",
+    "thoroughfare" : "W 25th St",
+    "locality" : "Vancouver",
+    "isoCountryCode" : "US",
+    "administrativeArea" : "WA",
+    "subLocality" : "Uptown Village",
+    "subThoroughfare" : "101–141",
+    "postalCode" : "98660",
+    "country" : "United States",
+    "subAdministrativeArea" : "Clark County"
+  }
+}
