@@ -6,6 +6,7 @@ import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType } fro
 import SpaceSidebar from "@/components/SpaceSidebar";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
+import PolycamLogo from "@/components/PolycamLogo";
 
 export default function Home() {
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -259,7 +260,7 @@ Provide:
   };
 
   return (
-    <div className="flex h-screen bg-[#0a0a0a]">
+    <div className="flex h-screen bg-[#100f0f]">
       {/* Sidebar */}
       <SpaceSidebar
         spaces={spaces}
@@ -275,18 +276,25 @@ Provide:
       {/* Main area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="h-14 border-b border-gray-800 flex items-center justify-between px-6 bg-[#0a0a0a]">
-          <h1 className="text-xl font-semibold text-white">Space Talk</h1>
+        <header className="h-14 border-b border-[#2a2827] flex items-center justify-between px-6 bg-[#100f0f]">
+          <div className="flex items-center gap-3">
+            <PolycamLogo className="w-6 h-7" color="#ffffff" />
+            <h1 className="text-xl font-semibold text-white">Space Talk</h1>
+          </div>
           <div className="flex items-center gap-4">
             {hasAnalyzed && (
               <button
                 onClick={handleNewAnalysis}
-                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                className="text-sm text-[#FF8E80] hover:text-[#FF7A6A] transition-colors"
               >
                 New Analysis
               </button>
             )}
-            <span className="text-sm text-gray-500">Powered by Polycam</span>
+            <span className="text-sm text-gray-500 flex items-center gap-1.5">
+              <span>Powered by</span>
+              <PolycamLogo className="w-4 h-5" color="currentColor" />
+              <span>Polycam</span>
+            </span>
           </div>
         </header>
 
@@ -295,10 +303,8 @@ Provide:
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">
               <div className="text-center max-w-lg">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                  <svg className="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center">
+                  <PolycamLogo className="w-10 h-12" color="#ffffff" />
                 </div>
                 <h2 className="text-2xl font-semibold text-white mb-3">Analyze Your Spaces</h2>
                 <p className="text-gray-400 mb-2">
@@ -313,7 +319,7 @@ Provide:
                   <button
                     onClick={() => handleAnalyze('ada')}
                     disabled={isLoading || selectedSpaces.length === 0}
-                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
+                    className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-[#2a2827] disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
                   >
                     {isLoading ? (
                       <>
@@ -337,7 +343,7 @@ Provide:
                   <button
                     onClick={() => handleAnalyze('compliance')}
                     disabled={isLoading || selectedSpaces.length === 0}
-                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
+                    className="px-6 py-3 bg-[#FF8E80] hover:bg-[#FF7A6A] disabled:bg-[#2a2827] disabled:cursor-not-allowed text-[#100f0f] disabled:text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
                   >
                     {isLoading ? (
                       <>
@@ -361,7 +367,7 @@ Provide:
                   <button
                     onClick={() => handleAnalyze('damage')}
                     disabled={isLoading || selectedSpaces.length === 0}
-                    className="px-6 py-3 bg-orange-600 hover:bg-orange-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
+                    className="px-6 py-3 bg-amber-600 hover:bg-amber-700 disabled:bg-[#2a2827] disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors inline-flex items-center justify-center gap-2 min-w-[240px]"
                   >
                     {isLoading ? (
                       <>

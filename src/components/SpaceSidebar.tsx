@@ -28,10 +28,10 @@ export default function SpaceSidebar({
 
   if (collapsed) {
     return (
-      <div className="w-12 bg-[#0a0a0a] border-r border-gray-800 flex flex-col items-center py-4">
+      <div className="w-12 bg-[#100f0f] border-r border-[#2a2827] flex flex-col items-center py-4">
         <button
           onClick={onToggleCollapse}
-          className="p-2 text-gray-400 hover:text-gray-200 hover:bg-[#1a1a1a] rounded-lg transition-colors"
+          className="p-2 text-gray-400 hover:text-gray-200 hover:bg-[#1a1918] rounded-lg transition-colors"
           title="Expand sidebar"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,19 +46,19 @@ export default function SpaceSidebar({
   }
 
   return (
-    <div className="w-[280px] bg-[#0a0a0a] border-r border-gray-800 flex flex-col h-full">
+    <div className="w-[280px] bg-[#100f0f] border-r border-[#2a2827] flex flex-col h-full">
       {/* Header */}
-      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+      <div className="p-4 border-b border-[#2a2827] flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-gray-200 font-medium">Spaces</h2>
-          <span className="text-xs bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">
+          <span className="text-xs bg-[#2a2827] text-gray-400 px-2 py-0.5 rounded-full">
             {spaces.length}
           </span>
         </div>
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="p-1 text-gray-400 hover:text-gray-200 hover:bg-[#1a1a1a] rounded transition-colors"
+            className="p-1 text-gray-400 hover:text-gray-200 hover:bg-[#1a1918] rounded transition-colors"
             title="Collapse sidebar"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,7 +69,7 @@ export default function SpaceSidebar({
       </div>
 
       {/* Select all/none toggle */}
-      <div className="px-4 py-2 border-b border-gray-800">
+      <div className="px-4 py-2 border-b border-[#2a2827]">
         <button
           onClick={allSelected ? onDeselectAll : onSelectAll}
           className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
@@ -91,17 +91,17 @@ export default function SpaceSidebar({
             {spaces.map((space) => (
               <label
                 key={space.id}
-                className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#1a1a1a] cursor-pointer transition-colors"
+                className="flex items-start gap-3 p-2 rounded-lg hover:bg-[#1a1918] cursor-pointer transition-colors"
               >
                 <input
                   type="checkbox"
                   checked={selectedSpaces.includes(space.id)}
                   onChange={() => onToggleSpace(space.id)}
-                  className="mt-1 w-4 h-4 rounded border-gray-600 bg-[#1a1a1a] text-blue-600 focus:ring-blue-500 focus:ring-offset-0"
+                  className="mt-1 w-4 h-4 rounded border-[#3a3837] bg-[#1a1918] text-blue-600 focus:ring-blue-500 focus:ring-offset-0"
                 />
                 <div className="flex-1 min-w-0">
                   {/* Thumbnail */}
-                  <div className="w-full aspect-video bg-[#1a1a1a] rounded-lg overflow-hidden mb-2 relative">
+                  <div className="w-full aspect-video bg-[#1a1918] rounded-lg overflow-hidden mb-2 relative">
                     {space.thumbnailUrl ? (
                       <Image
                         src={space.thumbnailUrl}

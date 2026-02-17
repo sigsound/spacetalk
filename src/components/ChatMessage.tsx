@@ -16,8 +16,8 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
           isUser
-            ? "bg-blue-600 text-white"
-            : "bg-[#1a1a1a] text-gray-100 border border-gray-800"
+            ? "bg-[#FF8E80] text-[#100f0f]"
+            : "bg-[#1a1918] text-gray-100 border border-[#2a2827]"
         }`}
       >
         {isUser ? (
@@ -45,7 +45,7 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
                 h3: ({ children }) => <h3 className="text-base font-bold mb-2 mt-2">{children}</h3>,
                 strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
                 a: ({ href, children }) => (
-                  <a href={href} className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
+                  <a href={href} className="text-[#FF8E80] hover:underline" target="_blank" rel="noopener noreferrer">
                     {children}
                   </a>
                 ),
