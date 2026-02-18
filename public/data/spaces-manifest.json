@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-17T19:06:38.696Z",
+  "generatedAt": "2026-02-18T00:44:55.465Z",
   "spaces": [
     {
       "id": "space1",
@@ -6484,7 +6484,7 @@
         "306986744744.jpg"
       ],
       "imagesByRoom": null,
-      "floorplanData": null,
+      "floorplanData": "Room,Description,Value\nEntire Roomplan,Address,101–141 W 25th St Vancouver WA\nEntire Roomplan,Latitude,45.639389 m\nEntire Roomplan,Longitude,-122.671589 m\nEntire Roomplan,Altitude [ft],128' 3.2\"\nEntire Roomplan,Total exterior floor area [ft^2],0.0\nEntire Roomplan,Total livable floor area [ft^2],0.0\nEntire Roomplan,Wall area [ft^2],0.0\nEntire Roomplan,Volume [ft^3],0.00\nEntire Roomplan,Total perimeter in rooms [ft],0'\nEntire Roomplan,Total window area [ft^2],0.0\nNone,Door dimensions (w x h) [ft],8' 4.4\" x 12' 7.8\"\nKey,Dimensions (bounding box),Smallest rectangle that contains the room\nKey,Dimensions (inscribed),Largest rectangle that fits inside the room\nKey,Dimensions,Rectangular rooms: inscribed dimensions == bounding box dimensions\nSettings,Wall thickness [ft],0' 3.9\"\nSettings,Doors casing width [ft],0' 1.6\"\nSettings,Windows casing width [ft],0' 1.6\"\nSettings,Each room area method,Internal wall area excluded\n",
       "locationData": {
         "location": {
           "altitude": 39.41688008392983,

@@ -1,0 +1,578 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType } from "@/lib/types";
+import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+
+export default function SpaceViewPage() {
+  const params = useParams();
+  const router = useRouter();
+  const spaceId = params.id as string;
+
+  const [space, setSpace] = useState<Space | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [documentSetupOpen, setDocumentSetupOpen] = useState(false);
+  const [visibilityOpen, setVisibilityOpen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Floorplan zoom/pan state
+  const [zoom, setZoom] = useState(0.5);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const floorplanContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleZoomIn = useCallback(() => {
+    setZoom((prev) => Math.min(prev * 1.25, 5));
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    setZoom((prev) => Math.max(prev / 1.25, 0.25));
+  }, []);
+
+  const handleResetView = useCallback(() => {
+    setZoom(0.5);
+    setPan({ x: 0, y: 0 });
+  }, []);
+
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    setZoom((prev) => Math.min(Math.max(prev * delta, 0.25), 5));
+  }, []);
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (e.button === 0) {
+      setIsPanning(true);
+      setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+    }
+  }, [pan]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (isPanning) {
+      setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+    }
+  }, [isPanning, panStart]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsPanning(false);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsPanning(false);
+  }, []);
+
+  // Fetch space data
+  useEffect(() => {
+    async function fetchSpace() {
+      try {
+        const res = await fetch("/api/spaces");
+        const data = await res.json();
+        const foundSpace = data.spaces.find((s: Space) => s.id === spaceId);
+        if (foundSpace) {
+          setSpace(foundSpace);
+        } else {
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Failed to fetch space:", error);
+        router.push("/");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSpace();
+  }, [spaceId, router]);
+
+  // Auto-scroll to bottom of messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleAnalyze = async (type: AnalysisType) => {
+    const prompts: Record<AnalysisType, string> = {
+      ada: `Conduct a comprehensive ADA accessibility compliance check on this space.
+
+Provide:
+1. **Executive Summary** - Overall accessibility status
+2. **Critical Issues** - Violations that prevent access or pose safety risks
+3. **Moderate Issues** - Non-compliant items that should be addressed
+4. **Minor Issues** - Recommendations for improved accessibility
+5. **Compliant Features** - Areas meeting ADA requirements
+6. **Recommendations** - Prioritized list of remediation steps with estimated complexity`,
+
+      compliance: `Conduct a comprehensive building code and zoning compliance check on this space.
+
+Provide:
+1. **Property Overview** - Location, jurisdiction, apparent use/occupancy type
+2. **Structural Compliance** - Room sizes, ceiling heights, egress analysis
+3. **Electrical Compliance** - Visible electrical concerns
+4. **Plumbing Compliance** - Fixture placement, ventilation
+5. **Fire Safety** - Detector presence, exit routes, fire separation
+6. **Zoning Observations** - Apparent permitted use, any obvious concerns
+7. **Permit Concerns** - Signs of unpermitted work
+8. **Recommendations** - Items requiring professional inspection or remediation`,
+
+      damage: `Conduct a comprehensive damage assessment on this space.
+
+Provide:
+1. **Damage Overview** - Type(s) of damage observed, overall severity
+2. **Origin Analysis** - If fire damage, analyze patterns to identify likely origin area
+3. **Room-by-Room Assessment** - Detailed damage in each affected area
+4. **Structural Concerns** - Any compromised structural elements
+5. **Systems Affected** - Electrical, plumbing, HVAC impact
+6. **Safety Hazards** - Immediate concerns requiring attention
+7. **Documentation Notes** - Key evidence and observations for the claim file
+8. **Investigation Flags** - Any patterns or inconsistencies warranting further review`,
+    };
+
+    await handleSend(prompts[type], type);
+  };
+
+  const handleSend = async (content: string, analysisType?: AnalysisType) => {
+    if (!space) return;
+
+    const userMessage: ChatMessageType = {
+      id: uuidv4(),
+      role: "user",
+      content,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
+    setIsStreaming(true);
+    setInputValue("");
+
+    const assistantMessage: ChatMessageType = {
+      id: uuidv4(),
+      role: "assistant",
+      content: "",
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, assistantMessage]);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          selectedSpaces: [space.id],
+          uploadedFiles,
+          analysisType,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to send message");
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No response body");
+
+      const decoder = new TextDecoder();
+      let fullContent = "";
+      let metaReceived = false;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6);
+            if (data === "[DONE]") break;
+
+            try {
+              const parsed = JSON.parse(data);
+
+              if (parsed.type === "meta" && !metaReceived) {
+                metaReceived = true;
+                if (!parsed.isFollowUp) {
+                  fullContent = `*Analyzing ${parsed.sampledImages} sampled images...*\n\n`;
+                }
+                if (fullContent) {
+                  setMessages((prev) =>
+                    prev.map((m) =>
+                      m.id === assistantMessage.id
+                        ? { ...m, content: fullContent }
+                        : m
+                    )
+                  );
+                }
+              } else if (parsed.type === "error") {
+                throw new Error(parsed.error || "An error occurred");
+              } else if (parsed.text) {
+                fullContent += parsed.text;
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantMessage.id
+                      ? { ...m, content: fullContent }
+                      : m
+                  )
+                );
+              }
+            } catch (parseError) {
+              if (parseError instanceof Error && parseError.message !== "Unexpected token") {
+                throw parseError;
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Something went wrong";
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantMessage.id
+            ? { ...m, content: `**Error:** ${errorMessage}` }
+            : m
+        )
+      );
+    } finally {
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && inputValue.trim() && !isLoading) {
+      e.preventDefault();
+      handleSend(inputValue.trim());
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-[#100f0f] flex items-center justify-center">
+        <div className="text-gray-500">Loading space...</div>
+      </div>
+    );
+  }
+
+  if (!space) {
+    return null;
+  }
+
+  return (
+    <div className="h-screen bg-[#100f0f] flex overflow-hidden fixed inset-0">
+      {/* Left Sidebar */}
+      <div className="w-[320px] min-w-[320px] bg-[#1a1918] border-r border-[#2a2827] flex flex-col h-full z-30 relative overflow-hidden">
+        {/* Close button and Floor selector */}
+        <div className="p-4 border-b border-[#2a2827]">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-white font-medium">Floor 1</span>
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            <div className="flex items-center gap-2">
+              <button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </button>
+              <Link
+                href="/"
+                className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {/* Download button */}
+          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2a2827] hover:bg-[#3a3837] text-white rounded-lg transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download
+          </button>
+        </div>
+
+        {/* Accordions */}
+        <div className="border-b border-[#2a2827]">
+          {/* Document setup */}
+          <button
+            onClick={() => setDocumentSetupOpen(!documentSetupOpen)}
+            className="w-full flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#2a2827]/50 transition-colors"
+          >
+            <span className="text-sm">Document setup</span>
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform ${documentSetupOpen ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          {documentSetupOpen && (
+            <div className="px-4 pb-3 text-sm text-gray-500">
+              Document settings will appear here
+            </div>
+          )}
+
+          {/* Visibility */}
+          <button
+            onClick={() => setVisibilityOpen(!visibilityOpen)}
+            className="w-full flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#2a2827]/50 transition-colors"
+          >
+            <span className="text-sm">Visibility</span>
+            <svg
+              className={`w-4 h-4 text-gray-400 transition-transform ${visibilityOpen ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          {visibilityOpen && (
+            <div className="px-4 pb-3 text-sm text-gray-500">
+              Visibility settings will appear here
+            </div>
+          )}
+        </div>
+
+        {/* Chat messages */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
+          {messages.map((message, index) => (
+            <div
+              key={message.id}
+              className={`${message.role === "user" ? "ml-4" : ""}`}
+            >
+              <div
+                className={`rounded-xl px-3 py-2 text-sm ${
+                  message.role === "user"
+                    ? "bg-[#FF8E80] text-[#100f0f] ml-auto max-w-[90%]"
+                    : "bg-[#2a2827] text-gray-100 max-w-full"
+                }`}
+              >
+                {message.role === "user" ? (
+                  <p className="whitespace-pre-wrap">{message.content}</p>
+                ) : (
+                  <div className="prose prose-invert prose-sm max-w-none">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                        ul: ({ children }) => <ul className="mb-2 ml-4 list-disc">{children}</ul>,
+                        ol: ({ children }) => <ol className="mb-2 ml-4 list-decimal">{children}</ol>,
+                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                        h1: ({ children }) => <h1 className="text-base font-bold mb-2 mt-3">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-sm font-bold mb-2 mt-2">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-sm font-bold mb-1 mt-2">{children}</h3>,
+                        strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                    {isStreaming && index === messages.length - 1 && message.role === "assistant" && (
+                      <span className="inline-block w-2 h-4 bg-gray-400 animate-pulse ml-1" />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input area */}
+        <div className="p-4 border-t border-[#2a2827]">
+          <div className="flex items-center gap-2">
+            <button className="p-2 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded-lg transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+            </button>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about your spaces"
+              disabled={isLoading}
+              className="flex-1 bg-[#2a2827] border border-[#3a3837] rounded-full px-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-[#4a4847] disabled:opacity-50"
+            />
+            <button
+              onClick={() => inputValue.trim() && handleSend(inputValue.trim())}
+              disabled={isLoading || !inputValue.trim()}
+              className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white rounded-full transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main area */}
+      <div className="flex-1 relative overflow-hidden">
+        {/* Analysis buttons - top right */}
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-3">
+          <button
+            onClick={() => handleAnalyze("ada")}
+            disabled={isLoading}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-600/50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-full transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            ADA Accessibility
+          </button>
+          <button
+            onClick={() => handleAnalyze("compliance")}
+            disabled={isLoading}
+            className="flex items-center gap-2 px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-[#3a3837] text-white text-sm font-medium rounded-full transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Building Code
+          </button>
+          <button
+            onClick={() => handleAnalyze("damage")}
+            disabled={isLoading}
+            className="flex items-center gap-2 px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-amber-600 text-amber-500 text-sm font-medium rounded-full transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Damage Assessment
+          </button>
+        </div>
+
+        {/* Floorplan viewer */}
+        <div className="h-full flex flex-col p-8 pt-16">
+          {/* Floorplan container with zoom/pan */}
+          <div className="relative flex-1 w-full">
+            {space.floorplanSvgUrl ? (
+              <>
+                {/* Zoom controls */}
+                <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+                  <button
+                    onClick={handleZoomIn}
+                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    title="Zoom in"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleZoomOut}
+                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    title="Zoom out"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleResetView}
+                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    title="Reset view"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Zoom level indicator */}
+                <div className="absolute top-4 left-16 z-20 px-2 py-1 bg-[#1a1918]/80 border border-[#3a3837] rounded text-xs text-gray-400">
+                  {Math.round(zoom * 100)}%
+                </div>
+
+                {/* Compass indicator */}
+                <div className="absolute top-4 right-4 w-16 h-16 z-20">
+                  <svg viewBox="0 0 64 64" className="w-full h-full text-gray-400">
+                    <circle cx="32" cy="32" r="30" fill="#1a1918" fillOpacity="0.8" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+                    <path d="M32 8 L36 28 L32 24 L28 28 Z" fill="currentColor" />
+                    <path d="M32 56 L28 36 L32 40 L36 36 Z" fill="currentColor" opacity="0.3" />
+                    <path d="M8 32 L28 28 L24 32 L28 36 Z" fill="currentColor" opacity="0.3" />
+                    <path d="M56 32 L36 36 L40 32 L36 28 Z" fill="currentColor" opacity="0.3" />
+                    <text x="32" y="6" textAnchor="middle" fill="currentColor" fontSize="8">N</text>
+                  </svg>
+                </div>
+
+                {/* Pan/zoom container */}
+                <div
+                  ref={floorplanContainerRef}
+                  className="absolute inset-0 cursor-grab active:cursor-grabbing"
+                  onWheel={handleWheel}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {/* SVG floorplan with transform */}
+                  <img
+                    src={space.floorplanSvgUrl}
+                    alt="Floorplan"
+                    className="pointer-events-none select-none"
+                    draggable={false}
+                    style={{
+                      filter: "invert(1)",
+                      position: "absolute",
+                      left: "50%",
+                      top: "50%",
+                      transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                      transformOrigin: "center center",
+                      transition: isPanning ? "none" : "transform 0.1s ease-out",
+                      maxWidth: "none",
+                      maxHeight: "none",
+                    }}
+                  />
+                </div>
+
+                {/* Scale indicator */}
+                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 text-gray-500 text-xs bg-[#1a1918]/80 px-2 py-1 rounded">
+                  <div className="w-16 h-0.5 bg-gray-500" />
+                  <span>1 m</span>
+                </div>
+
+                {/* Instructions hint */}
+                <div className="absolute bottom-4 right-4 z-20 text-xs text-gray-600">
+                  Scroll to zoom • Drag to pan
+                </div>
+              </>
+            ) : (
+              <div className="h-full flex items-center justify-center text-gray-500">
+                <div className="text-center">
+                  <svg className="w-20 h-20 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <p>No floorplan available for this space</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

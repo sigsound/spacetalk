@@ -6,6 +6,13 @@ export interface Space {
   thumbnailUrl: string | null;
   imageCount: number;
   metadata: Record<string, unknown>;
+  // Floorplan data
+  floorplanSvgUrl: string | null;
+  floorplanCsvUrl: string | null;
+  reportPdfUrl: string | null;
+  // Optional address/location info from metadata
+  address?: string;
+  area?: number; // in square meters
 }
 
 export interface ChatMessage {
