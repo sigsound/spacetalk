@@ -28,7 +28,7 @@ export default function SpaceSelectionPage() {
   return (
     <div className="min-h-screen bg-[#100f0f]">
       {/* Header */}
-      <header className="h-16 border-b border-[#2a2827] flex items-center justify-between px-8">
+      <header className="h-16 border-b border-[#2a2827] flex items-center justify-between px-4 sm:px-8">
         <div className="flex items-center gap-3">
           <PolycamLogo className="w-6 h-7" color="#ffffff" />
           <h1 className="text-xl font-semibold text-white">Space Talk</h1>
@@ -41,9 +41,9 @@ export default function SpaceSelectionPage() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-6xl mx-auto px-8 py-12">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-semibold text-white mb-3">Select a Space</h2>
+      <main className="max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3">Select a Space</h2>
           <p className="text-gray-400">
             Choose a space to analyze with AI-powered insights
           </p>

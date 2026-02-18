@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType } from "@/lib/types";
+import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType, SampledImagesData } from "@/lib/types";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import SampledImagesGallery from "@/components/SampledImagesGallery";
 
 export default function SpaceViewPage() {
   const params = useParams();
@@ -21,6 +22,8 @@ export default function SpaceViewPage() {
   const [inputValue, setInputValue] = useState("");
   const [documentSetupOpen, setDocumentSetupOpen] = useState(false);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
+  const [sampledImagesData, setSampledImagesData] = useState<SampledImagesData | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Floorplan zoom/pan state
@@ -207,6 +210,10 @@ Provide:
                 metaReceived = true;
                 if (!parsed.isFollowUp) {
                   fullContent = `*Analyzing ${parsed.sampledImages} sampled images...*\n\n`;
+                  // Store sampled images data for the gallery
+                  if (parsed.sampledImagesData) {
+                    setSampledImagesData(parsed.sampledImagesData);
+                  }
                 }
                 if (fullContent) {
                   setMessages((prev) =>
@@ -217,7 +224,7 @@ Provide:
                     )
                   );
                 }
-              } else if (parsed.type === "error") {
+              } else if (parsed.error) {
                 throw new Error(parsed.error || "An error occurred");
               } else if (parsed.text) {
                 fullContent += parsed.text;
@@ -274,8 +281,32 @@ Provide:
 
   return (
     <div className="h-screen bg-[#100f0f] flex overflow-hidden fixed inset-0">
+      {/* Mobile sidebar toggle */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="lg:hidden fixed top-4 left-4 z-40 p-2 bg-[#1a1918] border border-[#3a3837] rounded-lg text-white"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Left Sidebar */}
-      <div className="w-[320px] min-w-[320px] bg-[#1a1918] border-r border-[#2a2827] flex flex-col h-full z-30 relative overflow-hidden">
+      <div className={`
+        fixed lg:relative inset-y-0 left-0 z-50 lg:z-30
+        w-[85vw] sm:w-[320px] min-w-0 lg:min-w-[320px]
+        bg-[#1a1918] border-r border-[#2a2827] flex flex-col h-full overflow-hidden
+        transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         {/* Close button and Floor selector */}
         <div className="p-4 border-b border-[#2a2827]">
           <div className="flex items-center justify-between mb-4">
@@ -286,6 +317,15 @@ Provide:
               </svg>
             </div>
             <div className="flex items-center gap-2">
+              {/* Close sidebar button - mobile only */}
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
               <button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -355,6 +395,13 @@ Provide:
             </div>
           )}
         </div>
+
+        {/* Sampled Images Gallery */}
+        {sampledImagesData && (
+          <div className="border-b border-[#2a2827] max-h-[40%] overflow-y-auto">
+            <SampledImagesGallery data={sampledImagesData} />
+          </div>
+        )}
 
         {/* Chat messages */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4">
@@ -432,47 +479,49 @@ Provide:
       {/* Main area */}
       <div className="flex-1 relative overflow-hidden">
         {/* Analysis buttons - top right */}
-        <div className="absolute top-4 right-4 z-10 flex items-center gap-3">
+        <div className="absolute top-4 right-4 z-10 flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-3">
           <button
             onClick={() => handleAnalyze("ada")}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-600/50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-full transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-600/50 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-medium rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
             </svg>
-            ADA Accessibility
+            <span className="hidden xs:inline">ADA</span>
+            <span className="hidden sm:inline"> Accessibility</span>
           </button>
           <button
             onClick={() => handleAnalyze("compliance")}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-[#3a3837] text-white text-sm font-medium rounded-full transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-[#3a3837] text-white text-xs sm:text-sm font-medium rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            Building Code
+            <span className="hidden xs:inline">Building</span>
+            <span className="hidden sm:inline"> Code</span>
           </button>
           <button
             onClick={() => handleAnalyze("damage")}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-amber-600 text-amber-500 text-sm font-medium rounded-full transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-amber-600 text-amber-500 text-xs sm:text-sm font-medium rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            Damage Assessment
+            <span className="hidden xs:inline">Damage</span>
           </button>
         </div>
 
         {/* Floorplan viewer */}
-        <div className="h-full flex flex-col p-8 pt-16">
+        <div className="h-full flex flex-col p-4 sm:p-8 pt-16 sm:pt-16 pl-14 lg:pl-4 sm:pl-8">
           {/* Floorplan container with zoom/pan */}
           <div className="relative flex-1 w-full">
             {space.floorplanSvgUrl ? (
               <>
                 {/* Zoom controls */}
-                <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+                <div className="absolute top-4 left-0 sm:left-4 z-20 flex flex-col gap-2">
                   <button
                     onClick={handleZoomIn}
                     className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
@@ -503,12 +552,12 @@ Provide:
                 </div>
 
                 {/* Zoom level indicator */}
-                <div className="absolute top-4 left-16 z-20 px-2 py-1 bg-[#1a1918]/80 border border-[#3a3837] rounded text-xs text-gray-400">
+                <div className="absolute top-4 left-12 sm:left-16 z-20 px-2 py-1 bg-[#1a1918]/80 border border-[#3a3837] rounded text-xs text-gray-400">
                   {Math.round(zoom * 100)}%
                 </div>
 
                 {/* Compass indicator */}
-                <div className="absolute top-4 right-4 w-16 h-16 z-20">
+                <div className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 z-20 hidden sm:block">
                   <svg viewBox="0 0 64 64" className="w-full h-full text-gray-400">
                     <circle cx="32" cy="32" r="30" fill="#1a1918" fillOpacity="0.8" stroke="currentColor" strokeWidth="1" opacity="0.5" />
                     <path d="M32 8 L36 28 L32 24 L28 28 Z" fill="currentColor" />
@@ -556,7 +605,7 @@ Provide:
                 </div>
 
                 {/* Instructions hint */}
-                <div className="absolute bottom-4 right-4 z-20 text-xs text-gray-600">
+                <div className="absolute bottom-4 right-4 z-20 text-xs text-gray-600 hidden sm:block">
                   Scroll to zoom • Drag to pan
                 </div>
               </>
