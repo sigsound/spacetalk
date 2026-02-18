@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-18T00:44:55.465Z",
+  "generatedAt": "2026-02-18T01:01:50.950Z",
   "spaces": [
     {
       "id": "space1",
@@ -2865,7 +2865,10 @@
           "verticalAccuracy": 3,
           "altitude": 35.87425442511849
         }
-      }
+      },
+      "floorplanSvgPath": "/data/spaces/space1/floorplan.svg",
+      "floorplanCsvPath": "/data/spaces/space1/floorplan.csv",
+      "reportPdfPath": "/data/spaces/space1/report.pdf"
     },
     {
       "id": "space2",
@@ -3041,7 +3044,10 @@
           "administrativeArea": "WA",
           "subLocality": "Hough"
         }
-      }
+      },
+      "floorplanSvgPath": "/data/spaces/space2/floorplan.svg",
+      "floorplanCsvPath": "/data/spaces/space2/floorplan.csv",
+      "reportPdfPath": "/data/spaces/space2/report.pdf"
     },
     {
       "id": "space3",
@@ -4115,7 +4121,10 @@
           "headingAccuracy": 17.3913516998291,
           "trueHeading": 136.55465698242188
         }
-      }
+      },
+      "floorplanSvgPath": "/data/spaces/space3/floorplan.svg",
+      "floorplanCsvPath": "/data/spaces/space3/floorplan.csv",
+      "reportPdfPath": "/data/spaces/space3/report.pdf"
     },
     {
       "id": "space4",
@@ -6392,7 +6401,10 @@
           "altitude": 309.87697228714353,
           "latitude": 45.18178666252669
         }
-      }
+      },
+      "floorplanSvgPath": "/data/spaces/space4/floorplan.svg",
+      "floorplanCsvPath": null,
+      "reportPdfPath": "/data/spaces/space4/report.pdf"
     },
     {
       "id": "space5",
@@ -6510,7 +6522,10 @@
           "trueHeading": 210.10433959960938,
           "headingAccuracy": 11.181597709655762
         }
-      }
+      },
+      "floorplanSvgPath": "/data/spaces/space5/floorplan.svg",
+      "floorplanCsvPath": "/data/spaces/space5/floorplan.csv",
+      "reportPdfPath": "/data/spaces/space5/report.pdf"
     }
   ]
 }

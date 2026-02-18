@@ -39,6 +39,10 @@ interface SpaceManifestEntry {
   imagesByRoom: { [roomLabel: string]: string[] } | null;
   floorplanData: string | null;
   locationData: object | null;
+  // Floorplan file paths (if they exist)
+  floorplanSvgPath: string | null;
+  floorplanCsvPath: string | null;
+  reportPdfPath: string | null;
 }
 
 interface Manifest {
@@ -155,6 +159,9 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
     const floorplanPath = path.join(spaceDir, "floorplan.csv");
     const locationDir = path.join(spaceDir, "location");
     const thumbnailPath = path.join(spaceDir, "thumbnail.jpg");
+    const floorplanSvgPath = path.join(spaceDir, "floorplan.svg");
+    const floorplanCsvFilePath = path.join(spaceDir, "floorplan.csv");
+    const reportPdfPath = path.join(spaceDir, "report.pdf");
 
     // Get sorted list of all images
     const images = fs.existsSync(imagesDir)
@@ -212,6 +219,15 @@ export function generateManifest(spacesDirectory: string = spacesDir): Manifest 
       imagesByRoom,
       floorplanData,
       locationData,
+      floorplanSvgPath: fs.existsSync(floorplanSvgPath)
+        ? `/data/spaces/${entry.name}/floorplan.svg`
+        : null,
+      floorplanCsvPath: fs.existsSync(floorplanCsvFilePath)
+        ? `/data/spaces/${entry.name}/floorplan.csv`
+        : null,
+      reportPdfPath: fs.existsSync(reportPdfPath)
+        ? `/data/spaces/${entry.name}/report.pdf`
+        : null,
     };
   });
 
