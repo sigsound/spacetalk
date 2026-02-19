@@ -43,6 +43,29 @@ const RESOURCE_FILES: Record<AnalysisType, string[]> = {
   damage: ['DamageAssessment.txt'],
 };
 
+// System prompt for general spatial queries (not a specific report type)
+const GENERAL_SYSTEM_PROMPT = `You are a spatial analysis assistant helping users understand 3D-captured environments.
+
+You have been provided with:
+1. Floor plan PDF with visual layout showing room labels, dimensions, doors, fixtures, and precise measurements
+2. Floor plan data (CSV) with detailed room measurements and fixture information
+3. Physical location data (address, coordinates)
+4. Photographs from various angles throughout the space
+5. Camera position data showing where each photo was taken
+
+Your task is to answer questions about the space accurately and concisely. When analyzing:
+- First examine the floorplan PDF and CSV for structural measurements and room layouts
+- Reference camera positions to understand where photos were taken
+- Examine relevant images to verify details or locate specific objects
+- Provide direct, specific answers citing room names, measurements, and image references
+
+For queries like "locate the cat" or "where is the X":
+- Use room data and camera positions to narrow down search areas
+- Examine relevant images
+- Provide a clear, specific answer (e.g., "The cat is in the Living Room, visible in Image 23")
+
+Be conversational but precise. Don't generate full reports unless specifically asked—just answer the question.`;
+
 // System prompts for each analysis type
 const SYSTEM_PROMPTS: Record<AnalysisType, string> = {
   ada: `You are an ADA (Americans with Disabilities Act) compliance specialist analyzing 3D-captured spaces.
@@ -266,7 +289,40 @@ export async function POST(req: NextRequest) {
         text: `\n=== SPACE: ${spacePath} ===`
       });
 
-      // Add floorplan data from manifest if available
+      // Add floorplan PDF as image FIRST (visual representation with measurements)
+      // Only load for initial question, not follow-ups
+      if (!isFollowUp && spaceManifest?.floorplanSvgPath) {
+        // Replace .svg with .pdf in path
+        const floorplanPdfPath = spaceManifest.floorplanSvgPath.replace('.svg', '.pdf');
+        const floorplanPdfUrl = `${baseUrl}${floorplanPdfPath}`;
+        
+        try {
+          const pdfResponse = await fetch(floorplanPdfUrl);
+          if (pdfResponse.ok) {
+            const pdfBuffer = await pdfResponse.arrayBuffer();
+            const pdfData = Buffer.from(pdfBuffer).toString("base64");
+            
+            contentBlocks.push({
+              type: "text",
+              text: `\n[Floor Plan with Measurements]`
+            });
+            contentBlocks.push({
+              type: "document",
+              source: {
+                type: "base64",
+                media_type: "application/pdf",
+                data: pdfData
+              }
+            });
+            
+            console.log(`[Chat API] Loaded floorplan PDF for ${spacePath}`);
+          }
+        } catch (e) {
+          console.warn(`[Chat API] Failed to load floorplan PDF for ${spacePath}:`, e);
+        }
+      }
+
+      // Add floorplan data from manifest if available (contains all measurements)
       if (spaceManifest?.floorplanData) {
         contentBlocks.push({
           type: "text",
@@ -486,10 +542,10 @@ export async function POST(req: NextRequest) {
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       try {
-        // Use analysis-specific system prompt or default
+        // Use analysis-specific system prompt or general spatial query prompt
         const systemPrompt = validAnalysisType 
           ? SYSTEM_PROMPTS[validAnalysisType]
-          : SYSTEM_PROMPTS.compliance; // Default to compliance for general queries
+          : GENERAL_SYSTEM_PROMPT; // Default to general spatial queries
           
         stream = anthropic.messages.stream({
           model: "claude-sonnet-4-20250514",

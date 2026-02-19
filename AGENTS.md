@@ -30,6 +30,18 @@ Browser (Chat UI) → POST /api/chat → Claude API (claude-sonnet-4-20250514 wi
                  └── Space selector fetches from GET /api/spaces
 ```
 
+### Query Types
+1. **Report Queries** - Triggered by button clicks (ADA, Building Code, Damage)
+   - Uses structured analysis prompts with specific sections
+   - Loads reference documentation for the analysis type
+   - Generates comprehensive formatted reports
+
+2. **General Spatial Queries** - Free-form questions in chat input
+   - Examples: "locate the cat", "how big is the kitchen?", "where is the door?"
+   - Uses conversational system prompt focused on direct Q&A
+   - Examines floorplan data and relevant images to answer specific questions
+   - Returns concise answers, not full reports
+
 ### Expected Data Structure
 ```
 /public/data/spaces/
@@ -44,6 +56,8 @@ Browser (Chat UI) → POST /api/chat → Claude API (claude-sonnet-4-20250514 wi
 
 ### Key Directories
 - `src/app/api/chat/route.ts` - Claude API integration with SSE streaming
+  - Contains `GENERAL_SYSTEM_PROMPT` for spatial Q&A
+  - Contains `SYSTEM_PROMPTS` for report types (ADA, compliance, damage)
 - `src/app/api/spaces/route.ts` - Discovers spaces from data directory
 - `src/components/` - React components (ChatMessage, ChatInput, SpaceSidebar)
 - `src/lib/sampling.ts` - Image sampling logic (caps at ~50-150 images per space)
@@ -55,6 +69,14 @@ Cannot send all images to Claude. Sampling intervals based on total count:
 - ≤2000 images: interval=25 (~80 sampled)
 - ≤5000 images: interval=50 (~100 sampled)
 - >5000 images: interval=100 (~100-150 sampled)
+
+### Data Loading Order
+1. Reference documentation (for report queries only)
+2. **Floor plan PDF** (visual layout with measurements - ~650KB, vision-readable)
+3. Floor plan CSV data (room dimensions, fixtures)
+4. Location data (address, coordinates)
+5. Thumbnail image
+6. Sampled images (room-based or uniform sampling)
 
 ### Streaming Implementation
 - API route returns Server-Sent Events (SSE)
