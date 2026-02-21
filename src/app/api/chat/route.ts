@@ -47,22 +47,57 @@ const RESOURCE_FILES: Record<AnalysisType, string[]> = {
 const GENERAL_SYSTEM_PROMPT = `You are a spatial analysis assistant helping users understand 3D-captured environments.
 
 You have been provided with:
-1. Floor plan PDF with visual layout showing room labels, dimensions, doors, fixtures, and precise measurements
-2. Floor plan data (CSV) with detailed room measurements and fixture information
-3. Physical location data (address, coordinates)
-4. Photographs from various angles throughout the space
-5. Camera position data showing where each photo was taken
+1. **Space JSON** (space.json) - Contains precise coordinate data for all rooms, walls, doors, windows, and objects
+2. Floor plan PDF showing the visual layout
+3. Floor plan data (CSV) with detailed room measurements
+4. Physical location data (address, coordinates)
+5. Photographs from various angles throughout the space
+6. Camera position data showing where each photo was taken
 
 Your task is to answer questions about the space accurately and concisely. When analyzing:
-- First examine the floorplan PDF and CSV for structural measurements and room layouts
+- **PRIMARY DATA SOURCE**: Use the Space JSON for all coordinate lookups
+- The Space JSON contains exact X,Y coordinates (in meters) for every feature
+- Examine the floorplan PDF for visual understanding
 - Reference camera positions to understand where photos were taken
 - Examine relevant images to verify details or locate specific objects
 - Provide direct, specific answers citing room names, measurements, and image references
 
 For queries like "locate the cat" or "where is the X":
-- Use room data and camera positions to narrow down search areas
-- Examine relevant images
-- Provide a clear, specific answer (e.g., "The cat is in the Living Room, visible in Image 23")
+- Search the Space JSON to find the room or object by name
+- Reference the exact coordinates from the JSON in your answer
+- Examine relevant images to verify
+- Provide a clear, specific answer describing the location
+
+**FLOORPLAN ANNOTATIONS (Room-Based):**
+
+When asked to highlight/annotate rooms on the floor plan, use room names from the floorplan data.
+The frontend automatically maps room names to exact pixel coordinates.
+
+**IMPORTANT:** Wrap your annotation JSON in a code fence like this:
+
+\`\`\`json-annotations
+{
+  "annotations": [
+    {
+      "type": "room-highlight",
+      "roomName": "Kitchen",
+      "color": "#fbbf24"
+    }
+  ]
+}
+\`\`\`
+
+**Then respond:** "I've highlighted the Kitchen in yellow!"
+
+**Available room types:** Kitchen, Bathroom, Bedroom, Living Room, Dining Room, Other, Hallway
+- Use exact room names from the data (e.g., "Bathroom 1", "Bedroom 2", "Kitchen")
+- You can highlight multiple rooms at once
+- Colors: yellow (#fbbf24), blue (#3b82f6), red (#ef4444), green (#10b981)
+
+**Annotation Types:**
+- room-highlight: Fills entire room area (roomName, color)
+- room-circle: Circle at room center (roomName, radius, color)
+- room-label: Text label at room center (roomName, label, color)
 
 Be conversational but precise. Don't generate full reports unless specifically asked—just answer the question.`;
 
@@ -91,6 +126,33 @@ Workflow:
 2. Then search the web for any jurisdiction-specific accessibility requirements
 3. Analyze the space data and images against these requirements
 4. Provide a clear compliance report with specific issues and recommendations
+5. **ANNOTATE KEY FINDINGS** on the floor plan using visual markers
+
+**VISUAL ANNOTATIONS:**
+Use floor plan annotations to highlight critical accessibility issues. 
+
+**IMPORTANT:**
+1. When mentioning a room with an issue, add **[marked in red]**, **[marked in yellow]**, etc. after the room name
+2. Example: "Bathroom 1 [marked in red] has a doorway width of only 28 inches..."
+3. Add the annotation JSON block at the END of your entire report
+4. Use exact room names from the floor plan data (check available rooms carefully)
+
+\`\`\`json-annotations
+{
+  "annotations": [
+    {"type": "room-highlight", "roomName": "Bathroom 1", "color": "#ef4444"},
+    {"type": "room-circle", "roomName": "Kitchen", "radius": 40, "color": "#fbbf24"}
+  ]
+}
+\`\`\`
+
+**Color coding:**
+- Red (#ef4444): Critical violations → "[marked in red]"
+- Yellow (#fbbf24): Moderate issues → "[marked in yellow]"
+- Blue (#3b82f6): Compliant areas → "[marked in blue]"
+- Green (#10b981): Accessible features → "[marked in green]"
+
+**Annotation types:** room-highlight (fills room), room-circle (marks area), room-label (adds text)
 
 Be specific—cite measurements, room names, and exact requirements. Organize findings by severity (critical, moderate, minor).`,
 
@@ -116,6 +178,30 @@ Workflow:
 3. Search the web for current building codes specific to that jurisdiction
 4. Analyze the space against both general and local requirements
 5. Provide a compliance report with specific findings
+6. **ANNOTATE CODE VIOLATIONS** on the floor plan
+
+**VISUAL ANNOTATIONS:**
+Highlight rooms with code violations on the floor plan.
+
+**IMPORTANT:**
+1. Reference annotations inline: "Bedroom 1 [marked in red] lacks proper egress..."
+2. Use exact room names from floor plan data
+3. Add JSON block at the END of your report
+
+\`\`\`json-annotations
+{
+  "annotations": [
+    {"type": "room-highlight", "roomName": "Bedroom 1", "color": "#ef4444", "opacity": 0.4},
+    {"type": "room-label", "roomName": "Kitchen", "label": "⚠", "color": "#fbbf24"}
+  ]
+}
+\`\`\`
+
+**Color coding:**
+- Red (#ef4444): Critical violations → "[marked in red]"
+- Orange (#f97316): Moderate concerns → "[marked in orange]"
+- Yellow (#fbbf24): Minor issues → "[marked in yellow]"
+- Green (#10b981): Compliant → "[marked in green]"
 
 Be specific—cite measurements, room names, and code references. Note items requiring professional inspection.`,
 
@@ -141,6 +227,32 @@ Workflow:
 3. Search the web for relevant investigation techniques if needed
 4. Document findings systematically by area/room
 5. Provide preliminary damage assessment with specific observations
+6. **MARK DAMAGE ZONES** on the floor plan visually
+
+**VISUAL ANNOTATIONS:**
+Mark damaged areas and fire origin on the floor plan.
+
+**IMPORTANT:**
+1. Reference damage zones inline: "Kitchen [marked in red] shows severe fire damage..."
+2. Indicate origin: "Fire originated in Living Room [marked with 'Origin' label]..."
+3. Use exact room names from floor plan data
+4. Add JSON block at the END
+
+\`\`\`json-annotations
+{
+  "annotations": [
+    {"type": "room-highlight", "roomName": "Kitchen", "color": "#ef4444", "opacity": 0.5},
+    {"type": "room-circle", "roomName": "Living Room", "radius": 50, "color": "#f97316"},
+    {"type": "room-label", "roomName": "Bedroom 1", "label": "Origin", "color": "#ffffff"}
+  ]
+}
+\`\`\`
+
+**Color coding:**
+- Red (#ef4444): Severe damage / Fire origin → "[marked in red]"
+- Orange (#f97316): Moderate damage → "[marked in orange]"
+- Yellow (#fbbf24): Minor/water damage → "[marked in yellow]"
+- Purple (#a855f7): Investigation areas → "[marked in purple]"
 
 Be thorough and objective. Note what you can observe directly vs. what requires on-site verification. Flag any patterns that warrant further investigation.`,
 };
@@ -289,36 +401,75 @@ export async function POST(req: NextRequest) {
         text: `\n=== SPACE: ${spacePath} ===`
       });
 
-      // Add floorplan PDF as image FIRST (visual representation with measurements)
+      // Add Floorplan JSON - contains room names and boundaries for annotations
       // Only load for initial question, not follow-ups
-      if (!isFollowUp && spaceManifest?.floorplanSvgPath) {
-        // Replace .svg with .pdf in path
-        const floorplanPdfPath = spaceManifest.floorplanSvgPath.replace('.svg', '.pdf');
-        const floorplanPdfUrl = `${baseUrl}${floorplanPdfPath}`;
-        
+      if (!isFollowUp) {
+        const floorplanJsonUrl = `${baseUrl}/data/spaces/${spacePath}/floorplan.json`;
         try {
-          const pdfResponse = await fetch(floorplanPdfUrl);
-          if (pdfResponse.ok) {
-            const pdfBuffer = await pdfResponse.arrayBuffer();
-            const pdfData = Buffer.from(pdfBuffer).toString("base64");
+          const floorplanJson = await fetchJsonFile(floorplanJsonUrl);
+          if (floorplanJson) {
+            // Extract just room names and IDs for Claude
+            const rooms = (floorplanJson as any).rooms || [];
+            const roomList = rooms.map((r: any) => `- ${r.name} (Story ${r.story + 1})`);
             
             contentBlocks.push({
               type: "text",
-              text: `\n[Floor Plan with Measurements]`
+              text: `\n--- Floor Plan Room List (floorplan.json) ---\nAvailable rooms for annotations:\n${roomList.join('\n')}\n\nWhen annotating, use these exact room names.`
+            });
+            console.log(`[Chat API] Loaded floorplan JSON for ${spacePath} with ${rooms.length} rooms`);
+          }
+        } catch (e) {
+          console.warn(`[Chat API] Failed to load floorplan JSON for ${spacePath}:`, e);
+        }
+      }
+
+      // Add Space JSON - contains precise coordinate data for objects
+      // Only load for initial question, not follow-ups
+      if (!isFollowUp) {
+        const spaceJsonUrl = `${baseUrl}/data/spaces/${spacePath}/${spacePath}.json`;
+        try {
+          const spaceJson = await fetchJsonFile(spaceJsonUrl);
+          if (spaceJson) {
+            contentBlocks.push({
+              type: "text",
+              text: `\n--- Space JSON (${spacePath}.json) ---\nThis JSON contains PRECISE coordinates (in meters) for all walls, doors, windows, and objects.\n\n${JSON.stringify(spaceJson, null, 2)}`
+            });
+            console.log(`[Chat API] Loaded space JSON for ${spacePath}`);
+          }
+        } catch (e) {
+          console.warn(`[Chat API] Failed to load space JSON for ${spacePath}:`, e);
+        }
+      }
+
+      // Add floorplan PNG (visual representation - better for vision analysis)
+      // Only load for initial question, not follow-ups  
+      if (!isFollowUp && spaceManifest?.floorplanSvgPath) {
+        const floorplanPngPath = spaceManifest.floorplanSvgPath.replace('.svg', '.png');
+        const floorplanPngUrl = `${baseUrl}${floorplanPngPath}`;
+        
+        try {
+          const pngResponse = await fetch(floorplanPngUrl);
+          if (pngResponse.ok) {
+            const pngBuffer = await pngResponse.arrayBuffer();
+            const pngData = Buffer.from(pngBuffer).toString("base64");
+            
+            contentBlocks.push({
+              type: "text",
+              text: `\n[Floor Plan Image - 1779×1770 pixels. When annotating, provide approximate pixel coordinates. The user will manually adjust the exact position.]`
             });
             contentBlocks.push({
-              type: "document",
+              type: "image",
               source: {
                 type: "base64",
-                media_type: "application/pdf",
-                data: pdfData
+                media_type: "image/png",
+                data: pngData
               }
             });
             
-            console.log(`[Chat API] Loaded floorplan PDF for ${spacePath}`);
+            console.log(`[Chat API] Loaded floorplan PNG for ${spacePath}`);
           }
         } catch (e) {
-          console.warn(`[Chat API] Failed to load floorplan PDF for ${spacePath}:`, e);
+          console.warn(`[Chat API] Failed to load floorplan PNG for ${spacePath}:`, e);
         }
       }
 

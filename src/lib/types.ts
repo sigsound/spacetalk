@@ -47,3 +47,29 @@ export interface SampledImagesData {
   }[];
   totalSampled: number;
 }
+
+// Floorplan annotations
+export type AnnotationType = 'circle' | 'rectangle' | 'highlight' | 'arrow' | 'label' | 'pencil' | 'text';
+
+export interface FloorplanAnnotation {
+  id: string;
+  type: AnnotationType;
+  room?: string;
+  // Coordinates as percentage of floorplan dimensions (0-100)
+  x: number;
+  y: number;
+  // Additional properties based on type
+  width?: number;  // for rectangle
+  height?: number; // for rectangle
+  radius?: number; // for circle
+  color?: string;
+  fill?: boolean;  // for shapes - whether to fill or just stroke
+  label?: string;  // for label type
+  text?: string;   // for text type
+  fontSize?: number; // for text type
+  toX?: number;    // for arrow end point
+  toY?: number;    // for arrow end point
+  opacity?: number; // for all types
+  pathData?: string; // for pencil type (SVG path data)
+  bounds?: { minX: number; maxX: number; minY: number; maxY: number }; // for pencil selection
+}

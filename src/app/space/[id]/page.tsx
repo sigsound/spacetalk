@@ -3,10 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType, SampledImagesData } from "@/lib/types";
+import { Space, ChatMessage as ChatMessageType, UploadedFile, AnalysisType, SampledImagesData, FloorplanAnnotation } from "@/lib/types";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import SampledImagesGallery from "@/components/SampledImagesGallery";
+import FloorplanAnnotations from "@/components/FloorplanAnnotations";
+import AnnotationEditor from "@/components/AnnotationEditor";
+import AnnotationToolbar from "@/components/AnnotationToolbar";
+import { mapRoomsToPixels, findRoomByName, findRoomsByPattern, type RoomBounds, type FloorplanData } from "@/lib/roomMapper";
 
 export default function SpaceViewPage() {
   const params = useParams();
@@ -24,6 +28,14 @@ export default function SpaceViewPage() {
   const [visibilityOpen, setVisibilityOpen] = useState(false);
   const [sampledImagesData, setSampledImagesData] = useState<SampledImagesData | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [annotations, setAnnotations] = useState<FloorplanAnnotation[]>([]);
+  const [roomMap, setRoomMap] = useState<Map<string, RoomBounds> | null>(null);
+  const [activeTool, setActiveTool] = useState<"pan" | "select" | "pencil" | "circle" | "rectangle" | "text">("pan");
+  const [selectedColor, setSelectedColor] = useState("#fbbf24");
+  const [selectedOpacity, setSelectedOpacity] = useState(0.6);
+  const [fillEnabled, setFillEnabled] = useState(false);
+  const [selectedAnnotationId, setSelectedAnnotationId] = useState<string | null>(null);
+  const [isDrawingAnnotations, setIsDrawingAnnotations] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Floorplan zoom/pan state
@@ -53,11 +65,11 @@ export default function SpaceViewPage() {
   }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (e.button === 0) {
+    if (e.button === 0 && activeTool === "pan") {
       setIsPanning(true);
       setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
     }
-  }, [pan]);
+  }, [pan, activeTool]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (isPanning) {
@@ -73,7 +85,32 @@ export default function SpaceViewPage() {
     setIsPanning(false);
   }, []);
 
-  // Fetch space data
+  const handleScreenshot = useCallback(async () => {
+    if (!floorplanContainerRef.current) return;
+    
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(floorplanContainerRef.current, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+      });
+      
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${space?.name || 'floorplan'}-annotated.png`;
+        link.click();
+        URL.revokeObjectURL(url);
+      });
+    } catch (error) {
+      console.error('Screenshot failed:', error);
+    }
+  }, [space]);
+
+  // Fetch space data and coordinate bounds
   useEffect(() => {
     async function fetchSpace() {
       try {
@@ -82,6 +119,21 @@ export default function SpaceViewPage() {
         const foundSpace = data.spaces.find((s: Space) => s.id === spaceId);
         if (foundSpace) {
           setSpace(foundSpace);
+          
+          // Load floorplan JSON to map rooms to pixel coordinates
+          try {
+            const floorplanRes = await fetch(`/data/spaces/${spaceId}/floorplan.json`);
+            if (floorplanRes.ok) {
+              const floorplanData: FloorplanData = await floorplanRes.json();
+              const mappedRooms = mapRoomsToPixels(floorplanData);
+              setRoomMap(mappedRooms);
+              
+              console.log(`Loaded floorplan with ${mappedRooms.size} rooms`);
+              console.log('Available rooms:', Array.from(mappedRooms.keys()));
+            }
+          } catch (jsonError) {
+            console.warn('Failed to load floorplan data:', jsonError);
+          }
         } else {
           router.push("/");
         }
@@ -99,6 +151,23 @@ export default function SpaceViewPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Sync toolbar state with selected annotation
+  useEffect(() => {
+    if (selectedAnnotationId) {
+      const selectedAnnotation = annotations.find(ann => ann.id === selectedAnnotationId);
+      if (selectedAnnotation) {
+        // Update fill state to match the annotation
+        if (selectedAnnotation.fill !== undefined) {
+          setFillEnabled(selectedAnnotation.fill);
+        }
+        // Update opacity to match
+        if (selectedAnnotation.opacity !== undefined) {
+          setSelectedOpacity(selectedAnnotation.opacity);
+        }
+      }
+    }
+  }, [selectedAnnotationId, annotations]);
 
   const handleAnalyze = async (type: AnalysisType) => {
     const prompts: Record<AnalysisType, string> = {
@@ -154,6 +223,8 @@ Provide:
     setIsLoading(true);
     setIsStreaming(true);
     setInputValue("");
+    // Clear annotations on new query
+    setAnnotations([]);
 
     const assistantMessage: ChatMessageType = {
       id: uuidv4(),
@@ -228,6 +299,114 @@ Provide:
                 throw new Error(parsed.error || "An error occurred");
               } else if (parsed.text) {
                 fullContent += parsed.text;
+                
+                // Check for annotation JSON blocks (but don't show them to user)
+                const annotationMatch = fullContent.match(/```json-annotations\n([\s\S]*?)```/);
+                if (annotationMatch) {
+                  setIsDrawingAnnotations(true);
+                  try {
+                    const annotationData = JSON.parse(annotationMatch[1]);
+                    if (annotationData.annotations && Array.isArray(annotationData.annotations)) {
+                      if (!roomMap) {
+                        console.warn('Room map not loaded yet, cannot process annotations');
+                        setIsDrawingAnnotations(false);
+                        return;
+                      }
+                      
+                      const timestamp = Date.now();
+                      console.log('Parsing annotations:', annotationData.annotations);
+                      console.log('Available rooms:', Array.from(roomMap.keys()));
+                      
+                      const newAnnotations = annotationData.annotations.map((ann: any, idx: number) => {
+                        // Handle room-based annotations
+                        if (ann.type === 'room-highlight' || ann.type === 'room-circle' || ann.type === 'room-label') {
+                          console.log(`Looking for room: "${ann.roomName}" (type: ${ann.type})`);
+                          const roomBounds = findRoomByName(roomMap, ann.roomName);
+                          if (!roomBounds) {
+                            console.error(`Room not found: "${ann.roomName}"`);
+                            console.log('Did you mean one of these?', Array.from(roomMap.keys()));
+                            return null;
+                          }
+                          
+                          console.log(`✓ Found room: ${ann.roomName} ->`, roomBounds.bounds);
+                          
+                          // Convert to pixel-based annotation format
+                          if (ann.type === 'room-highlight') {
+                            return {
+                              id: `annotation-${timestamp}-${idx}-${Math.random()}`,
+                              type: 'highlight',
+                              x: roomBounds.bounds.x,
+                              y: roomBounds.bounds.y,
+                              width: roomBounds.bounds.width,
+                              height: roomBounds.bounds.height,
+                              color: ann.color || '#fbbf24',
+                              opacity: ann.opacity !== undefined ? ann.opacity : 0.4,
+                              room: ann.roomName
+                            };
+                          } else if (ann.type === 'room-circle') {
+                            return {
+                              id: `annotation-${timestamp}-${idx}-${Math.random()}`,
+                              type: 'circle',
+                              x: roomBounds.bounds.centerX,
+                              y: roomBounds.bounds.centerY,
+                              radius: ann.radius || 50,
+                              color: ann.color || '#3b82f6',
+                              opacity: ann.opacity !== undefined ? ann.opacity : 0.6,
+                              room: ann.roomName
+                            };
+                          } else if (ann.type === 'room-label') {
+                            return {
+                              id: `annotation-${timestamp}-${idx}-${Math.random()}`,
+                              type: 'label',
+                              x: roomBounds.bounds.centerX,
+                              y: roomBounds.bounds.centerY,
+                              label: ann.label,
+                              color: ann.color || '#111827',
+                              opacity: ann.opacity !== undefined ? ann.opacity : 0.9,
+                              room: ann.roomName
+                            };
+                          }
+                        }
+                        
+                        // Legacy pixel-based annotations (still supported)
+                        console.log('Pixel annotation:', ann);
+                        return {
+                          id: `annotation-${timestamp}-${idx}-${Math.random()}`,
+                          type: ann.type,
+                          x: Number(ann.x),
+                          y: Number(ann.y),
+                          width: ann.width ? Number(ann.width) : undefined,
+                          height: ann.height ? Number(ann.height) : undefined,
+                          radius: ann.radius ? Number(ann.radius) : undefined,
+                          color: ann.color,
+                          opacity: ann.opacity !== undefined ? ann.opacity : 0.6,
+                          room: ann.room,
+                          label: ann.label,
+                          toX: ann.toX ? Number(ann.toX) : undefined,
+                          toY: ann.toY ? Number(ann.toY) : undefined,
+                        };
+                      }).filter(Boolean);
+                      
+                      console.log('Setting annotations:', newAnnotations);
+                      // Replace any existing AI annotations from Claude (identified by annotation- prefix)
+                      setAnnotations((prev) => {
+                        const manualAnnotations = prev.filter(ann => !ann.id.startsWith('annotation-'));
+                        return [...manualAnnotations, ...newAnnotations as FloorplanAnnotation[]];
+                      });
+                      
+                      // Remove the annotation JSON block from the message content completely
+                      fullContent = fullContent.replace(/```json-annotations\n[\s\S]*?```/, '');
+                      // Clean up any extra newlines
+                      fullContent = fullContent.replace(/\n{3,}/g, '\n\n');
+                      
+                      setIsDrawingAnnotations(false);
+                    }
+                  } catch (e) {
+                    console.warn('Failed to parse annotations:', e);
+                    setIsDrawingAnnotations(false);
+                  }
+                }
+                
                 setMessages((prev) =>
                   prev.map((m) =>
                     m.id === assistantMessage.id
@@ -342,12 +521,15 @@ Provide:
             </div>
           </div>
 
-          {/* Download button */}
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2a2827] hover:bg-[#3a3837] text-white rounded-lg transition-colors">
+          {/* Screenshot button */}
+          <button 
+            onClick={handleScreenshot}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2a2827] hover:bg-[#3a3837] text-white rounded-lg transition-colors"
+          >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            Download
+            Screenshot
           </button>
         </div>
 
@@ -438,6 +620,14 @@ Provide:
                     {isStreaming && index === messages.length - 1 && message.role === "assistant" && (
                       <span className="inline-block w-2 h-4 bg-gray-400 animate-pulse ml-1" />
                     )}
+                    {isDrawingAnnotations && index === messages.length - 1 && message.role === "assistant" && (
+                      <div className="mt-2 text-xs text-blue-400 italic flex items-center gap-1.5">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                        </svg>
+                        <span className="animate-pulse">Drawing annotations...</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -479,7 +669,7 @@ Provide:
       {/* Main area */}
       <div className="flex-1 relative overflow-hidden">
         {/* Analysis buttons - top right */}
-        <div className="absolute top-4 right-4 z-10 flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-3">
+        <div className="absolute top-4 right-4 z-50 flex flex-col sm:flex-row items-end sm:items-center gap-2 sm:gap-3">
           <button
             onClick={() => handleAnalyze("ada")}
             disabled={isLoading}
@@ -513,6 +703,63 @@ Provide:
             <span>Damage</span>
           </button>
         </div>
+
+        {/* Annotation Toolbar - Fixed to viewport */}
+        {space.floorplanSvgUrl && (
+          <AnnotationToolbar
+            activeTool={activeTool}
+            onToolChange={setActiveTool}
+            selectedColor={selectedColor}
+            onColorChange={(color) => {
+              setSelectedColor(color);
+              // If an annotation is selected, update its color
+              if (selectedAnnotationId) {
+                setAnnotations(
+                  annotations.map((ann) =>
+                    ann.id === selectedAnnotationId ? { ...ann, color } : ann
+                  )
+                );
+              }
+            }}
+            selectedAnnotationId={selectedAnnotationId}
+            annotations={annotations}
+            selectedOpacity={selectedOpacity}
+            fillEnabled={fillEnabled}
+            onFillToggle={(enabled) => {
+              setFillEnabled(enabled);
+              // If an annotation is selected, update its fill property
+              if (selectedAnnotationId) {
+                setAnnotations(
+                  annotations.map((ann) =>
+                    ann.id === selectedAnnotationId ? { ...ann, fill: enabled } : ann
+                  )
+                );
+              }
+            }}
+            onOpacityChange={(opacity) => {
+              setSelectedOpacity(opacity);
+              if (selectedAnnotationId) {
+                setAnnotations(
+                  annotations.map((ann) =>
+                    ann.id === selectedAnnotationId ? { ...ann, opacity } : ann
+                  )
+                );
+              }
+            }}
+            hasSelection={selectedAnnotationId !== null}
+            onDelete={() => {
+              if (selectedAnnotationId) {
+                setAnnotations(annotations.filter((ann) => ann.id !== selectedAnnotationId));
+                setSelectedAnnotationId(null);
+              }
+            }}
+            annotationCount={annotations.length}
+            onClearAll={() => {
+              setAnnotations([]);
+              setSelectedAnnotationId(null);
+            }}
+          />
+        )}
 
         {/* Floorplan viewer */}
         <div className="h-full flex flex-col p-4 sm:p-8 pt-16 sm:pt-16 pl-14 lg:pl-4 sm:pl-8">
@@ -555,28 +802,29 @@ Provide:
                 <div className="absolute top-4 left-12 sm:left-16 z-20 px-2 py-1 bg-[#1a1918]/80 border border-[#3a3837] rounded text-xs text-gray-400">
                   {Math.round(zoom * 100)}%
                 </div>
-
-                {/* Compass indicator */}
-                <div className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 z-20 hidden sm:block">
-                  <svg viewBox="0 0 64 64" className="w-full h-full text-gray-400">
-                    <circle cx="32" cy="32" r="30" fill="#1a1918" fillOpacity="0.8" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-                    <path d="M32 8 L36 28 L32 24 L28 28 Z" fill="currentColor" />
-                    <path d="M32 56 L28 36 L32 40 L36 36 Z" fill="currentColor" opacity="0.3" />
-                    <path d="M8 32 L28 28 L24 32 L28 36 Z" fill="currentColor" opacity="0.3" />
-                    <path d="M56 32 L36 36 L40 32 L36 28 Z" fill="currentColor" opacity="0.3" />
-                    <text x="32" y="6" textAnchor="middle" fill="currentColor" fontSize="8">N</text>
-                  </svg>
-                </div>
+                
+                {/* Annotation counter */}
+                {annotations.length > 0 && (
+                  <div className="absolute top-16 left-12 sm:left-16 z-20 px-2 py-1 bg-blue-600/80 rounded text-xs text-white flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                    </svg>
+                    {annotations.length} annotation{annotations.length !== 1 ? 's' : ''}
+                  </div>
+                )}
 
                 {/* Pan/zoom container */}
                 <div
                   ref={floorplanContainerRef}
-                  className="absolute inset-0 cursor-grab active:cursor-grabbing"
+                  className="absolute inset-0"
                   onWheel={handleWheel}
                   onMouseDown={handleMouseDown}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
                   onMouseLeave={handleMouseLeave}
+                  style={{
+                    cursor: activeTool === "pan" ? (isPanning ? "grabbing" : "grab") : "default",
+                  }}
                 >
                   {/* SVG floorplan with transform */}
                   <img
@@ -594,19 +842,49 @@ Provide:
                       transition: isPanning ? "none" : "transform 0.1s ease-out",
                       maxWidth: "none",
                       maxHeight: "none",
+                      zIndex: 1,
                     }}
                   />
-                </div>
-
-                {/* Scale indicator */}
-                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2 text-gray-500 text-xs bg-[#1a1918]/80 px-2 py-1 rounded">
-                  <div className="w-16 h-0.5 bg-gray-500" />
-                  <span>1 m</span>
+                  
+                  {/* Annotation overlay with interactive editor - ALWAYS ON TOP */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      zIndex: 10,
+                      pointerEvents: activeTool === "pan" ? "none" : "auto",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                        transformOrigin: "center center",
+                        transition: isPanning ? "none" : "transform 0.1s ease-out",
+                      }}
+                    >
+                      <AnnotationEditor
+                        annotations={annotations}
+                        onAnnotationsChange={setAnnotations}
+                        width={1779}
+                        height={1770}
+                        transform={{ zoom, pan }}
+                        isPanning={isPanning}
+                      activeTool={activeTool}
+                      selectedColor={selectedColor}
+                      selectedOpacity={selectedOpacity}
+                      fillEnabled={fillEnabled}
+                      onSelectionChange={setSelectedAnnotationId}
+                      selectedAnnotationId={selectedAnnotationId}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Instructions hint */}
-                <div className="absolute bottom-4 right-4 z-20 text-xs text-gray-600 hidden sm:block">
-                  Scroll to zoom • Drag to pan
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-gray-500 bg-[#1a1918]/80 px-3 py-1.5 rounded-lg border border-[#3a3837] hidden sm:block">
+                  {activeTool === "pan" ? "Scroll to zoom • Drag to pan" : "Use Pan tool to move floor plan"}
                 </div>
               </>
             ) : (
