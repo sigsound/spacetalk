@@ -620,7 +620,7 @@ export default function AnnotationEditor({
               width="300"
               height="40"
             >
-              <div xmlns="http://www.w3.org/1999/xhtml" style={{ width: "100%", height: "100%" }}>
+              <div style={{ width: "100%", height: "100%" }}>
                 <input
                   type="text"
                   value={textInput}
