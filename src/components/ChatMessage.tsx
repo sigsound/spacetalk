@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown";
 import { ChatMessage as ChatMessageType } from "@/lib/types";
+import { useTheme } from "./ThemeProvider";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -9,6 +10,7 @@ interface ChatMessageProps {
 }
 
 export default function ChatMessage({ message, isStreaming }: ChatMessageProps) {
+  const { theme } = useTheme();
   const isUser = message.role === "user";
 
   return (
@@ -16,14 +18,14 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
           isUser
-            ? "bg-[#FF8E80] text-[#100f0f]"
-            : "bg-[#1a1918] text-gray-100 border border-[#2a2827]"
+            ? "bg-accent text-background"
+            : "bg-card text-foreground border border-border"
         }`}
       >
         {isUser ? (
           <p className="whitespace-pre-wrap">{message.content}</p>
         ) : (
-          <div className="prose prose-invert prose-sm max-w-none">
+          <div className={`prose prose-sm max-w-none ${theme === 'dark' ? 'prose-invert' : ''}`}>
             <ReactMarkdown
               components={{
                 p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
@@ -33,11 +35,11 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
                 code: ({ children, className }) => {
                   const isBlock = className?.includes("language-");
                   return isBlock ? (
-                    <pre className="bg-black/50 rounded p-3 overflow-x-auto my-2">
+                    <pre className="bg-foreground/10 rounded p-3 overflow-x-auto my-2">
                       <code className={className}>{children}</code>
                     </pre>
                   ) : (
-                    <code className="bg-black/50 px-1.5 py-0.5 rounded text-sm">{children}</code>
+                    <code className="bg-foreground/10 px-1.5 py-0.5 rounded text-sm">{children}</code>
                   );
                 },
                 h1: ({ children }) => <h1 className="text-xl font-bold mb-2 mt-4">{children}</h1>,
@@ -45,7 +47,7 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
                 h3: ({ children }) => <h3 className="text-base font-bold mb-2 mt-2">{children}</h3>,
                 strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
                 a: ({ href, children }) => (
-                  <a href={href} className="text-[#FF8E80] hover:underline" target="_blank" rel="noopener noreferrer">
+                  <a href={href} className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
                     {children}
                   </a>
                 ),

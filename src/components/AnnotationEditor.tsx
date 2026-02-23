@@ -662,8 +662,8 @@ export default function AnnotationEditor({
                     fontSize: "16px",
                     border: "2px solid #3b82f6",
                     borderRadius: "4px",
-                    backgroundColor: "#1a1918",
-                    color: "#ffffff",
+                    backgroundColor: "var(--card)",
+                    color: "var(--foreground)",
                     outline: "none",
                     fontFamily: "sans-serif",
                   }}

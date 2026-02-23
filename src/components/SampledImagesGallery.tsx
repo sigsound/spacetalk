@@ -17,7 +17,7 @@ function ImageThumbnail({
   return (
     <button
       onClick={onClick}
-      className="relative group aspect-square rounded-lg overflow-hidden bg-[#2a2827] hover:ring-2 hover:ring-[#FF8E80] transition-all"
+      className="relative group aspect-square rounded-lg overflow-hidden bg-surface hover:ring-2 hover:ring-accent transition-all"
       title={`Image ${image.index}: ${image.filename}`}
     >
       <img
@@ -63,11 +63,11 @@ function ImageModal({
         {/* Header */}
         <div className="flex items-center justify-between mb-2 text-white">
           <div>
-            <span className="text-[#FF8E80] font-medium">Image {image.index}</span>
-            <span className="text-gray-400 mx-2">•</span>
-            <span className="text-gray-300">{image.room}</span>
-            <span className="text-gray-400 mx-2">•</span>
-            <span className="text-gray-500 text-sm">{image.filename}</span>
+            <span className="text-accent font-medium">Image {image.index}</span>
+            <span className="text-muted mx-2">•</span>
+            <span className="text-muted">{image.room}</span>
+            <span className="text-muted mx-2">•</span>
+            <span className="text-muted-fg text-sm">{image.filename}</span>
           </div>
           <button 
             onClick={onClose}
@@ -126,17 +126,17 @@ function RoomSection({
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="border border-[#2a2827] rounded-lg overflow-hidden">
+    <div className="border border-border rounded-lg overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-3 bg-[#1a1918] hover:bg-[#222120] transition-colors"
+        className="w-full flex items-center justify-between p-3 bg-card hover:bg-card-hover transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-white font-medium">{roomName}</span>
-          <span className="text-gray-500 text-sm">({images.length} images)</span>
+          <span className="text-foreground font-medium">{roomName}</span>
+          <span className="text-muted-fg text-sm">({images.length} images)</span>
         </div>
         <svg 
-          className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+          className={`w-5 h-5 text-muted transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
           fill="none" 
           stroke="currentColor" 
           viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ function RoomSection({
       </button>
       
       {isExpanded && (
-        <div className="p-3 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 bg-[#100f0f]">
+        <div className="p-3 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 bg-background">
           {images.map(image => (
             <ImageThumbnail
               key={image.index}
@@ -188,31 +188,31 @@ export default function SampledImagesGallery({ data }: SampledImagesGalleryProps
     : -1;
 
   return (
-    <div className="border border-[#2a2827] rounded-xl overflow-hidden bg-[#1a1918] mb-4">
+    <div className="border border-border rounded-xl overflow-hidden bg-card mb-4">
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 hover:bg-[#222120] transition-colors"
+        className="w-full flex items-center justify-between p-4 hover:bg-card-hover transition-colors"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#FF8E80]/20 flex items-center justify-center">
-            <svg className="w-4 h-4 text-[#FF8E80]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center">
+            <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <div className="text-left">
-            <h3 className="text-white font-medium">Reference Images</h3>
-            <p className="text-gray-500 text-sm">
+            <h3 className="text-foreground font-medium">Reference Images</h3>
+            <p className="text-muted-fg text-sm">
               {data.totalSampled} images sampled from {data.spaces.length} space{data.spaces.length > 1 ? 's' : ''}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-sm">
+          <span className="text-muted text-sm">
             {isExpanded ? 'Hide' : 'Show'} gallery
           </span>
           <svg 
-            className={`w-5 h-5 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+            className={`w-5 h-5 text-muted transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
             fill="none" 
             stroke="currentColor" 
             viewBox="0 0 24 24"
@@ -224,13 +224,13 @@ export default function SampledImagesGallery({ data }: SampledImagesGalleryProps
 
       {/* Content */}
       {isExpanded && (
-        <div className="border-t border-[#2a2827] p-4 space-y-4 max-h-[500px] overflow-y-auto">
+        <div className="border-t border-border p-4 space-y-4 max-h-[500px] overflow-y-auto">
           {data.spaces.map(space => (
             <div key={space.spaceId} className="space-y-3">
               {data.spaces.length > 1 && (
-                <h4 className="text-gray-300 font-medium flex items-center gap-2">
+                <h4 className="text-muted font-medium flex items-center gap-2">
                   <span>{space.spaceName}</span>
-                  <span className="text-gray-500 text-sm font-normal">
+                  <span className="text-muted-fg text-sm font-normal">
                     ({space.sampledImages.length} of {space.totalImages} images)
                   </span>
                 </h4>

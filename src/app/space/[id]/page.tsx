@@ -10,11 +10,14 @@ import SampledImagesGallery from "@/components/SampledImagesGallery";
 import FloorplanAnnotations from "@/components/FloorplanAnnotations";
 import AnnotationEditor from "@/components/AnnotationEditor";
 import AnnotationToolbar from "@/components/AnnotationToolbar";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/components/ThemeProvider";
 import { mapRoomsToPixels, findRoomByName, findRoomsByPattern, type RoomBounds, type FloorplanData } from "@/lib/roomMapper";
 
 export default function SpaceViewPage() {
   const params = useParams();
   const router = useRouter();
+  const { theme } = useTheme();
   const spaceId = params.id as string;
 
   const [space, setSpace] = useState<Space | null>(null);
@@ -448,8 +451,8 @@ Provide:
 
   if (loading) {
     return (
-      <div className="h-screen bg-[#100f0f] flex items-center justify-center">
-        <div className="text-gray-500">Loading space...</div>
+      <div className="h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-fg">Loading space...</div>
       </div>
     );
   }
@@ -459,11 +462,11 @@ Provide:
   }
 
   return (
-    <div className="h-screen bg-[#100f0f] flex overflow-hidden fixed inset-0">
+    <div className="h-screen bg-background flex overflow-hidden fixed inset-0">
       {/* Mobile sidebar toggle */}
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-40 p-2 bg-[#1a1918] border border-[#3a3837] rounded-lg text-white"
+        className="lg:hidden fixed top-4 left-4 z-40 p-2 bg-card border border-border-hover rounded-lg text-foreground"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -482,16 +485,16 @@ Provide:
       <div className={`
         fixed lg:relative inset-y-0 left-0 z-50 lg:z-30
         w-[85vw] sm:w-[320px] min-w-0 lg:min-w-[320px]
-        bg-[#1a1918] border-r border-[#2a2827] flex flex-col h-full overflow-hidden
+        bg-card border-r border-border flex flex-col h-full overflow-hidden
         transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Close button and Floor selector */}
-        <div className="p-4 border-b border-[#2a2827]">
+        <div className="p-4 border-b border-border">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <span className="text-white font-medium">Floor 1</span>
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <span className="text-foreground font-medium">Floor 1</span>
+              <svg className="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -499,20 +502,21 @@ Provide:
               {/* Close sidebar button - mobile only */}
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors"
+                className="lg:hidden p-1.5 text-muted hover:text-foreground hover:bg-surface rounded transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <button className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors">
+              <ThemeToggle className="p-1.5" />
+              <button className="p-1.5 text-muted hover:text-foreground hover:bg-surface rounded transition-colors">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
               </button>
               <Link
                 href="/"
-                className="p-1.5 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors"
+                className="p-1.5 text-muted hover:text-foreground hover:bg-surface rounded transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -524,7 +528,7 @@ Provide:
           {/* Screenshot button */}
           <button 
             onClick={handleScreenshot}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#2a2827] hover:bg-[#3a3837] text-white rounded-lg transition-colors"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-surface hover:bg-surface-hover text-foreground rounded-lg transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -534,15 +538,15 @@ Provide:
         </div>
 
         {/* Accordions */}
-        <div className="border-b border-[#2a2827]">
+        <div className="border-b border-border">
           {/* Document setup */}
           <button
             onClick={() => setDocumentSetupOpen(!documentSetupOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#2a2827]/50 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-3 text-foreground hover:bg-surface/50 transition-colors"
           >
             <span className="text-sm">Document setup</span>
             <svg
-              className={`w-4 h-4 text-gray-400 transition-transform ${documentSetupOpen ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-muted transition-transform ${documentSetupOpen ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -551,7 +555,7 @@ Provide:
             </svg>
           </button>
           {documentSetupOpen && (
-            <div className="px-4 pb-3 text-sm text-gray-500">
+            <div className="px-4 pb-3 text-sm text-muted-fg">
               Document settings will appear here
             </div>
           )}
@@ -559,11 +563,11 @@ Provide:
           {/* Visibility */}
           <button
             onClick={() => setVisibilityOpen(!visibilityOpen)}
-            className="w-full flex items-center justify-between px-4 py-3 text-gray-200 hover:bg-[#2a2827]/50 transition-colors"
+            className="w-full flex items-center justify-between px-4 py-3 text-foreground hover:bg-surface/50 transition-colors"
           >
             <span className="text-sm">Visibility</span>
             <svg
-              className={`w-4 h-4 text-gray-400 transition-transform ${visibilityOpen ? "rotate-180" : ""}`}
+              className={`w-4 h-4 text-muted transition-transform ${visibilityOpen ? "rotate-180" : ""}`}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -572,7 +576,7 @@ Provide:
             </svg>
           </button>
           {visibilityOpen && (
-            <div className="px-4 pb-3 text-sm text-gray-500">
+            <div className="px-4 pb-3 text-sm text-muted-fg">
               Visibility settings will appear here
             </div>
           )}
@@ -580,7 +584,7 @@ Provide:
 
         {/* Sampled Images Gallery */}
         {sampledImagesData && (
-          <div className="border-b border-[#2a2827] max-h-[40%] overflow-y-auto">
+          <div className="border-b border-border max-h-[40%] overflow-y-auto">
             <SampledImagesGallery data={sampledImagesData} />
           </div>
         )}
@@ -595,14 +599,14 @@ Provide:
               <div
                 className={`rounded-xl px-3 py-2 text-sm ${
                   message.role === "user"
-                    ? "bg-[#FF8E80] text-[#100f0f] ml-auto max-w-[90%]"
-                    : "bg-[#2a2827] text-gray-100 max-w-full"
+                    ? "bg-accent text-background ml-auto max-w-[90%]"
+                    : "bg-surface text-foreground max-w-full"
                 }`}
               >
                 {message.role === "user" ? (
                   <p className="whitespace-pre-wrap">{message.content}</p>
                 ) : (
-                  <div className="prose prose-invert prose-sm max-w-none">
+                  <div className={`prose prose-sm max-w-none ${theme === 'dark' ? 'prose-invert' : ''}`}>
                     <ReactMarkdown
                       components={{
                         p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
@@ -637,9 +641,9 @@ Provide:
         </div>
 
         {/* Input area */}
-        <div className="p-4 border-t border-[#2a2827]">
+        <div className="p-4 border-t border-border">
           <div className="flex items-center gap-2">
-            <button className="p-2 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded-lg transition-colors">
+            <button className="p-2 text-muted hover:text-foreground hover:bg-surface rounded-lg transition-colors">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
               </svg>
@@ -651,7 +655,7 @@ Provide:
               onKeyDown={handleKeyDown}
               placeholder="Ask about your spaces"
               disabled={isLoading}
-              className="flex-1 bg-[#2a2827] border border-[#3a3837] rounded-full px-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-[#4a4847] disabled:opacity-50"
+              className="flex-1 bg-surface border border-border-hover rounded-full px-4 py-2 text-sm text-foreground placeholder-muted-fg focus:outline-none focus:border-border-focus disabled:opacity-50"
             />
             <button
               onClick={() => inputValue.trim() && handleSend(inputValue.trim())}
@@ -684,7 +688,7 @@ Provide:
           <button
             onClick={() => handleAnalyze("compliance")}
             disabled={isLoading}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-[#3a3837] text-white text-xs sm:text-sm font-medium rounded-full transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-card hover:bg-surface disabled:opacity-50 disabled:cursor-not-allowed border border-border-hover text-foreground text-xs sm:text-sm font-medium rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -695,7 +699,7 @@ Provide:
           <button
             onClick={() => handleAnalyze("damage")}
             disabled={isLoading}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#1a1918] hover:bg-[#2a2827] disabled:opacity-50 disabled:cursor-not-allowed border border-amber-600 text-amber-500 text-xs sm:text-sm font-medium rounded-full transition-colors"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-card hover:bg-surface disabled:opacity-50 disabled:cursor-not-allowed border border-amber-600 text-amber-500 text-xs sm:text-sm font-medium rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -771,7 +775,7 @@ Provide:
                 <div className="absolute top-4 left-0 sm:left-4 z-20 flex flex-col gap-2">
                   <button
                     onClick={handleZoomIn}
-                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    className="p-2 bg-card hover:bg-surface border border-border-hover text-foreground rounded-lg transition-colors"
                     title="Zoom in"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -780,7 +784,7 @@ Provide:
                   </button>
                   <button
                     onClick={handleZoomOut}
-                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    className="p-2 bg-card hover:bg-surface border border-border-hover text-foreground rounded-lg transition-colors"
                     title="Zoom out"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -789,7 +793,7 @@ Provide:
                   </button>
                   <button
                     onClick={handleResetView}
-                    className="p-2 bg-[#1a1918] hover:bg-[#2a2827] border border-[#3a3837] text-white rounded-lg transition-colors"
+                    className="p-2 bg-card hover:bg-surface border border-border-hover text-foreground rounded-lg transition-colors"
                     title="Reset view"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -799,7 +803,7 @@ Provide:
                 </div>
 
                 {/* Zoom level indicator */}
-                <div className="absolute top-4 left-12 sm:left-16 z-20 px-2 py-1 bg-[#1a1918]/80 border border-[#3a3837] rounded text-xs text-gray-400">
+                <div className="absolute top-4 left-12 sm:left-16 z-20 px-2 py-1 bg-card/80 border border-border-hover rounded text-xs text-muted">
                   {Math.round(zoom * 100)}%
                 </div>
                 
@@ -833,7 +837,7 @@ Provide:
                     className="pointer-events-none select-none"
                     draggable={false}
                     style={{
-                      filter: "invert(1)",
+                      filter: theme === "dark" ? "invert(1)" : "none",
                       position: "absolute",
                       left: "50%",
                       top: "50%",
@@ -883,12 +887,12 @@ Provide:
                 </div>
 
                 {/* Instructions hint */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-gray-500 bg-[#1a1918]/80 px-3 py-1.5 rounded-lg border border-[#3a3837] hidden sm:block">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 text-xs text-muted-fg bg-card/80 px-3 py-1.5 rounded-lg border border-border-hover hidden sm:block">
                   {activeTool === "pan" ? "Scroll to zoom • Drag to pan" : "Use Pan tool to move floor plan"}
                 </div>
               </>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-500">
+              <div className="h-full flex items-center justify-center text-muted-fg">
                 <div className="text-center">
                   <svg className="w-20 h-20 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" />

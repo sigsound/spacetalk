@@ -5,6 +5,7 @@ import { Space } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
 import PolycamLogo from "@/components/PolycamLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function SpaceSelectionPage() {
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -26,43 +27,46 @@ export default function SpaceSelectionPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#100f0f]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="h-16 border-b border-[#2a2827] flex items-center justify-between px-4 sm:px-8">
+      <header className="h-16 border-b border-border flex items-center justify-between px-4 sm:px-8">
         <div className="flex items-center gap-3">
-          <PolycamLogo className="w-6 h-7" color="#ffffff" />
-          <h1 className="text-xl font-semibold text-white">Space Talk</h1>
+          <PolycamLogo className="w-6 h-7" color="currentColor" />
+          <h1 className="text-xl font-semibold text-foreground">Space Talk</h1>
         </div>
-        <span className="text-sm text-gray-500 flex items-center gap-1.5">
-          <span>Powered by</span>
-          <PolycamLogo className="w-4 h-5" color="currentColor" />
-          <span>Polycam</span>
-        </span>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <span className="text-sm text-muted-fg flex items-center gap-1.5">
+            <span>Powered by</span>
+            <PolycamLogo className="w-4 h-5" color="currentColor" />
+            <span>Polycam</span>
+          </span>
+        </div>
       </header>
 
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-8 py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3">Select a Space</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-foreground mb-3">Select a Space</h2>
+          <p className="text-muted">
             Choose a space to analyze with AI-powered insights
           </p>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="text-gray-500">Loading spaces...</div>
+            <div className="text-muted-fg">Loading spaces...</div>
           </div>
         ) : spaces.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-[#1a1918] flex items-center justify-center">
-                <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-card flex items-center justify-center">
+                <svg className="w-10 h-10 text-muted-fg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
               </div>
-              <h3 className="text-xl font-medium text-white mb-2">No spaces found</h3>
-              <p className="text-gray-500">
+              <h3 className="text-xl font-medium text-foreground mb-2">No spaces found</h3>
+              <p className="text-muted-fg">
                 Add space folders to /public/data/spaces/
               </p>
             </div>
@@ -73,10 +77,10 @@ export default function SpaceSelectionPage() {
               <Link
                 key={space.id}
                 href={`/space/${space.id}`}
-                className="group block bg-[#1a1918] border border-[#2a2827] rounded-2xl overflow-hidden hover:border-[#3a3837] transition-all hover:shadow-lg hover:shadow-black/20"
+                className="group block bg-card border border-border rounded-2xl overflow-hidden hover:border-border-hover transition-all hover:shadow-lg hover:shadow-black/20"
               >
                 {/* Thumbnail */}
-                <div className="aspect-video bg-[#0a0a0a] relative overflow-hidden">
+                <div className="aspect-video bg-background relative overflow-hidden">
                   {space.thumbnailUrl ? (
                     <Image
                       src={space.thumbnailUrl}
@@ -86,7 +90,7 @@ export default function SpaceSelectionPage() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-600">
+                    <div className="w-full h-full flex items-center justify-center text-muted-fg">
                       <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
@@ -106,13 +110,13 @@ export default function SpaceSelectionPage() {
 
                 {/* Info */}
                 <div className="p-4">
-                  <h3 className="text-lg font-medium text-white mb-1 group-hover:text-[#FF8E80] transition-colors">
+                  <h3 className="text-lg font-medium text-foreground mb-1 group-hover:text-accent transition-colors">
                     {space.name}
                   </h3>
                   {space.address && (
-                    <p className="text-sm text-gray-400 mb-2">{space.address}</p>
+                    <p className="text-sm text-muted mb-2">{space.address}</p>
                   )}
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <div className="flex items-center gap-4 text-sm text-muted-fg">
                     <span className="flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />

@@ -43,7 +43,7 @@ export default function AnnotationToolbar({
   ];
 
   return (
-    <div className="fixed bottom-8 right-8 z-40 bg-[#1a1918]/95 border border-[#3a3837] rounded-lg shadow-xl p-3 flex flex-col gap-3 backdrop-blur-sm">
+    <div className="fixed bottom-8 right-8 z-40 bg-card/95 border border-border-hover rounded-lg shadow-xl p-3 flex flex-col gap-3 backdrop-blur-sm">
       {/* Tool selector */}
       <div className="flex items-center gap-2">
         <button
@@ -51,7 +51,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "pan"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Pan & Zoom"
         >
@@ -64,7 +64,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "select"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Select & Move"
         >
@@ -77,7 +77,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "pencil"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Pencil"
         >
@@ -90,7 +90,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "circle"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Circle"
         >
@@ -103,7 +103,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "rectangle"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Rectangle"
         >
@@ -116,7 +116,7 @@ export default function AnnotationToolbar({
           className={`p-2 rounded transition-colors ${
             activeTool === "text"
               ? "bg-blue-600 text-white"
-              : "text-gray-400 hover:text-white hover:bg-[#2a2827]"
+              : "text-muted hover:text-foreground hover:bg-surface"
           }`}
           title="Text"
         >
@@ -127,13 +127,13 @@ export default function AnnotationToolbar({
       </div>
 
       {/* Fill/Stroke toggle */}
-      <div className="flex items-center gap-2 border-t border-[#3a3837] pt-3">
+      <div className="flex items-center gap-2 border-t border-border-hover pt-3">
         <button
           onClick={() => onFillToggle(!fillEnabled)}
           className={`flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
             fillEnabled
               ? "bg-blue-600 text-white"
-              : "bg-[#2a2827] text-gray-400 hover:text-white"
+              : "bg-surface text-muted hover:text-foreground"
           }`}
           title="Toggle Fill"
         >
@@ -145,14 +145,14 @@ export default function AnnotationToolbar({
       </div>
 
       {/* Color picker */}
-      <div className="flex items-center gap-2 border-t border-[#3a3837] pt-3">
+      <div className="flex items-center gap-2 border-t border-border-hover pt-3">
         {colors.map((color) => (
           <button
             key={color.value}
             onClick={() => onColorChange(color.value)}
             className={`w-7 h-7 rounded-full border-2 transition-all ${
               selectedColor === color.value
-                ? "border-white scale-110 ring-2 ring-blue-500"
+                ? "border-foreground scale-110 ring-2 ring-blue-500"
                 : "border-transparent hover:scale-105"
             }`}
             style={{ backgroundColor: color.value }}
@@ -163,10 +163,10 @@ export default function AnnotationToolbar({
 
       {/* Opacity slider (when annotation selected) */}
       {hasSelection && (
-        <div className="flex flex-col gap-1 border-t border-[#3a3837] pt-3">
+        <div className="flex flex-col gap-1 border-t border-border-hover pt-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-400">Opacity</span>
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-muted">Opacity</span>
+            <span className="text-xs text-muted">
               {Math.round(selectedOpacity * 100)}%
             </span>
           </div>
@@ -186,7 +186,7 @@ export default function AnnotationToolbar({
       {hasSelection && (
         <button
           onClick={onDelete}
-          className="flex items-center justify-center gap-2 p-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors border-t border-[#3a3837] pt-3"
+          className="flex items-center justify-center gap-2 p-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded transition-colors border-t border-border-hover pt-3"
           title="Delete"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,7 +204,7 @@ export default function AnnotationToolbar({
               onClearAll();
             }
           }}
-          className="p-2 text-gray-400 hover:text-white hover:bg-[#2a2827] rounded transition-colors text-xs border-t border-[#3a3837] pt-3"
+          className="p-2 text-muted hover:text-foreground hover:bg-surface rounded transition-colors text-xs border-t border-border-hover pt-3"
           title="Clear All"
         >
           Clear All ({annotationCount})
